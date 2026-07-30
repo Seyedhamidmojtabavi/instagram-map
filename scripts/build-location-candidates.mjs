@@ -7,11 +7,69 @@ const appRoot = resolve(here, "..");
 const classifiedDir = resolve(appRoot, "..", "Classified");
 const outputPath = join(appRoot, "data", "location-candidates.json");
 
-const excludedWithoutBusinessEvidence = new Set([
+const personalOrEditorialCategories = new Set([
   "Creators_Public_Figures_and_Personal_Brands",
+  "Arts_Music_and_Entertainment",
+  "Media_News_and_Publishing",
   "Personal_and_Noncommercial",
   "Unclear",
 ]);
+
+const publicPlaceCategories = new Set([
+  "Restaurants",
+  "Cafes_and_Coffee_Shops",
+  "Bakeries_Desserts_and_Sweets",
+  "Food_Products_Catering_and_Grocery",
+  "Fashion_Beauty_Jewelry_and_Accessories",
+  "Electronics_Automotive_and_Gadgets",
+  "Home_Books_Gifts_and_Other_Retail",
+  "Education_and_Language",
+  "Immigration_Legal_and_Finance",
+  "Marketing_Design_and_Business_Services",
+  "Health_Medical_and_Wellness",
+  "Travel_Hotels_and_Events",
+  "Sports_and_Fitness",
+  "Community_Nonprofit_and_Government",
+  "Other_Businesses_and_Services",
+]);
+
+const repeatedLocationCategories = new Set([
+  "Restaurants",
+  "Cafes_and_Coffee_Shops",
+  "Bakeries_Desserts_and_Sweets",
+  "Food_Products_Catering_and_Grocery",
+  "Fashion_Beauty_Jewelry_and_Accessories",
+  "Electronics_Automotive_and_Gadgets",
+  "Home_Books_Gifts_and_Other_Retail",
+  "Education_and_Language",
+  "Health_Medical_and_Wellness",
+  "Travel_Hotels_and_Events",
+  "Sports_and_Fitness",
+]);
+
+const primaryCategoryPriority = [
+  "Restaurants",
+  "Cafes_and_Coffee_Shops",
+  "Bakeries_Desserts_and_Sweets",
+  "Food_Products_Catering_and_Grocery",
+  "Fashion_Beauty_Jewelry_and_Accessories",
+  "Electronics_Automotive_and_Gadgets",
+  "Home_Books_Gifts_and_Other_Retail",
+  "Education_and_Language",
+  "Immigration_Legal_and_Finance",
+  "Health_Medical_and_Wellness",
+  "Travel_Hotels_and_Events",
+  "Sports_and_Fitness",
+  "Community_Nonprofit_and_Government",
+  "Marketing_Design_and_Business_Services",
+  "Other_Businesses_and_Services",
+  "Technology_and_Software",
+  "Media_News_and_Publishing",
+  "Arts_Music_and_Entertainment",
+  "Creators_Public_Figures_and_Personal_Brands",
+  "Personal_and_Noncommercial",
+  "Unclear",
+];
 
 const categoryFiles = (await readdir(classifiedDir))
   .filter((name) => name.endsWith(".json"))
@@ -19,6 +77,39 @@ const categoryFiles = (await readdir(classifiedDir))
 
 const membership = new Map();
 const profiles = new Map();
+
+const explicitAddressPattern =
+  /(?<![\p{L}\p{N}])(?:آدرس|نشانی|address|شعبه|دفتر|خیابان|بلوار|میدان|کوچه|پلاک|طبقه|اتوبان|بزرگراه|چهارراه|نبش|مجتمع|پاساژ)(?![\p{L}\p{N}])/iu;
+const locationMarkerPattern = /(?:📍|location|لوکیشن|آدرس|نشانی|شعبه)/iu;
+
+function isAllowedPublicMapUrl(value) {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:") return false;
+    const hostname = url.hostname.toLocaleLowerCase("en");
+    if (
+      hostname === "maps.app.goo.gl" ||
+      hostname === "maps.google.com" ||
+      hostname === "waze.com" ||
+      hostname === "www.waze.com" ||
+      hostname === "ul.waze.com" ||
+      hostname === "balad.ir" ||
+      hostname === "www.balad.ir" ||
+      hostname === "maps.apple.com"
+    ) {
+      return true;
+    }
+    return (
+      (hostname === "google.com" || hostname === "www.google.com") &&
+      url.pathname.startsWith("/maps")
+    ) || (
+      (hostname === "neshan.org" || hostname === "www.neshan.org") &&
+      url.pathname.startsWith("/maps")
+    );
+  } catch {
+    return false;
+  }
+}
 
 for (const filename of categoryFiles) {
   const category = filename.replace(/\.json$/, "");
@@ -38,19 +129,34 @@ function externalLinks(profile) {
 }
 
 function directMapLink(profile) {
-  return externalLinks(profile).find((url) =>
-    /(?:google\.[^/]+\/maps|maps\.app\.goo\.gl|neshan\.org\/maps|balad\.ir|waze\.com)/i.test(url),
-  );
+  return externalLinks(profile).find(isAllowedPublicMapUrl);
 }
 
 function bioLocationLines(profile) {
-  const locationPattern =
-    /(?:📍|آدرس|نشانی|address|شعبه|دفتر|خیابان|بلوار|میدان|کوچه|پلاک|طبقه|تهران|کرج|قم|مشهد|اصفهان|شیراز|رشت|تبریز|اهواز|کیش)/iu;
+  const iranLocationPattern =
+    /(?<![\p{L}\p{N}])(?:تهران|tehran|کرج|karaj|قم|qom|مشهد|mashhad|اصفهان|isfahan|شیراز|shiraz|رشت|rasht|تبریز|tabriz|اهواز|ahvaz|کیش|kish|قشم|qeshm|بوشهر|bushehr|ارومیه|urmia|یزد|yazd|کرمان|kerman|ساری|sari|گرگان|gorgan|همدان|hamedan|قزوین|qazvin|زنجان|zanjan|اراک|arak|سنندج|sanandaj|کرمانشاه|kermanshah|بندر\s*عباس|bandar\s*abbas|مازندران|گیلان|خراسان|فارس|البرز)(?![\p{L}\p{N}])/iu;
+  const personalContextPattern =
+    /(?:دانشگاه|متولد|اهل\s|ساکن|خانواده|علاقه|دانش‌آموخته|دانش آموخته)/iu;
   return String(profile.biography ?? "")
     .split(/\r?\n/)
     .map((line) => line.trim())
-    .filter((line) => line.length >= 3 && locationPattern.test(line))
+    .filter(
+      (line) => {
+        if (line.length < 3) return false;
+        if (explicitAddressPattern.test(line)) return true;
+        if (!iranLocationPattern.test(line)) return false;
+        const looksFormattedAsLocation =
+          locationMarkerPattern.test(line) || line.length <= 42;
+        return looksFormattedAsLocation && !personalContextPattern.test(line);
+      },
+    )
     .slice(0, 4);
+}
+
+function isLikelyIranPostLocation(name) {
+  const foreignPattern =
+    /(?:toronto|vancouver|montreal|los angeles|new york|san jose|dubai|kuwait|cannes|india|usa|united states|canada|australia|germany|turkey|istanbul|london|paris|doha|qatar)/iu;
+  return !foreignPattern.test(name);
 }
 
 function postLocations(profile) {
@@ -99,20 +205,44 @@ for (const [username, profile] of profiles) {
   const mapLink = directMapLink(profile);
   const bioLines = bioLocationLines(profile);
   const locations = postLocations(profile);
-  const repeatedLocation = locations.find((item) => item.count >= 2);
-  const singleLocation = locations[0];
-  const isBusinessLike =
-    profile.isBusinessAccount === true ||
-    Boolean(profile.businessCategoryName) ||
-    categories.some((category) => !excludedWithoutBusinessEvidence.has(category));
+  const repeatedLocation = locations.find(
+    (item) => item.count >= 2 && isLikelyIranPostLocation(item.name),
+  );
+  const hasPublicPlaceCategory = categories.some((category) =>
+    publicPlaceCategories.has(category),
+  );
+  const hasPersonalOrEditorialCategory = categories.some((category) =>
+    personalOrEditorialCategories.has(category),
+  );
+  const allowsRepeatedLocation = categories.some((category) =>
+    repeatedLocationCategories.has(category),
+  );
+  const appearsInactive =
+    /(?:در حال جابه[‌ ]?جایی|در حال جابجایی|تعطیل|temporarily closed|permanently closed|we are moving|moving soon)/iu.test(
+      profile.biography ?? "",
+    );
+  const hasBusinessEvidence =
+    profile.isBusinessAccount === true || Boolean(profile.businessCategoryName);
+  const hasExplicitPublicEvidence = Boolean(
+    mapLink ||
+    bioLines.some((line) =>
+      explicitAddressPattern.test(line) || locationMarkerPattern.test(line),
+    ),
+  );
 
   // Personal and creator accounts are never located from incidental post tags.
-  // They need an explicit public-facing address or map link and business evidence.
+  // They need explicit public-place evidence and declared business evidence.
   const hasPublicEvidence = Boolean(mapLink || bioLines.length);
   const eligible =
-    isBusinessLike &&
+    !appearsInactive &&
+    hasPublicPlaceCategory &&
+    (!hasPersonalOrEditorialCategory ||
+      (hasExplicitPublicEvidence && hasBusinessEvidence)) &&
     (hasPublicEvidence ||
-      (repeatedLocation && categories.some((category) => !excludedWithoutBusinessEvidence.has(category))));
+      (repeatedLocation &&
+        allowsRepeatedLocation &&
+        !hasPersonalOrEditorialCategory &&
+        hasBusinessEvidence));
   if (!eligible) continue;
 
   const evidenceStrength = mapLink
@@ -121,12 +251,11 @@ for (const [username, profile] of profiles) {
       ? "public-address"
       : repeatedLocation
         ? "repeated-post-location"
-        : "single-post-location";
+        : "public-address";
 
   const locationText =
     bioLines.join("، ") ||
     repeatedLocation?.name ||
-    singleLocation?.name ||
     "";
   const displayName = profile.fullName || profile.username;
   const candidateTerm = [displayName, locationText].filter(Boolean).join("، ");
@@ -141,7 +270,9 @@ for (const [username, profile] of profiles) {
     instagramUrl: profile.url ?? `https://instagram.com/${username}`,
     businessCategoryName: profile.businessCategoryName ?? null,
     categories,
-    primaryCategory: categories[0],
+    primaryCategory:
+      primaryCategoryPriority.find((category) => categories.includes(category)) ??
+      categories[0],
     candidateTerm,
     cityHint,
     evidenceStrength,

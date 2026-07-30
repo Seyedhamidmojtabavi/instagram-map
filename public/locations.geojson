@@ -1,9 +1,1082 @@
 {
   "type": "FeatureCollection",
   "metadata": {
-    "status": "awaiting-location-enrichment",
-    "acceptedCount": 0,
-    "policy": "Only verified public-facing businesses, venues, and offices are mapped."
+    "generatedAt": "2026-07-30T16:57:04.117Z",
+    "sourceCandidateCount": 202,
+    "acceptedCount": 34,
+    "manualReviewCount": 20,
+    "reviewCount": 168,
+    "provider": "Neshan public PWA search",
+    "policy": "Only public-facing businesses, venues, and offices with explicit or repeated location evidence. Personal/residential locations are excluded."
   },
-  "features": []
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.420574277482444,
+          35.708062503902
+        ]
+      },
+      "properties": {
+        "username": "jahanekoochakeman_emarat",
+        "fullName": "عمارت جهان كوچك من",
+        "biography": "آدرس:تهران-خيابان طالقانى-خيابان موسوى-نرسيده به پارك هنرمندان-كوچه ايرانشهر پلاك ١\n٨٨٣٠٠٢٤٠-٠٢١\nهر روز هفته ١٢ظهر الى ٢٣\nپنجشنبه و جمعه ٩صبح الى ٢٣",
+        "address": "استان تهران، تهران، انقلاب اسلامی، موسوی، ایرانشهر (محله ایرانشهر)",
+        "categories": [
+          "Arts_Music_and_Entertainment",
+          "Cafes_and_Coffee_Shops"
+        ],
+        "primaryCategory": "Cafes_and_Coffee_Shops",
+        "color": "#a96f3a",
+        "instagramUrl": "https://www.instagram.com/jahanekoochakeman_emarat",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.844,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The exact venue name, Mousavi–IranShahr address, and public phone match.",
+          "nameScore": 0.98,
+          "locationScore": 0.261,
+          "crowdId": "1d4703373deb8352c34eecf3b9cd13c8"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.459607894424714,
+          35.784305707431265
+        ]
+      },
+      "properties": {
+        "username": "halvachisweets",
+        "fullName": "شیرینی و‌ حلوا حلواچی",
+        "biography": "🔸شيرينى مُدرن برخاسته از طعمى اَصيل🔸\n📍دیباجی جنوبی، نبش کاووس شرقی\nتماس: 27 0404 22 021 (۸:۳۰ - ۲۲)\nواتس‌اپ: 614 5454 0930 (۸:۳۰ - ۲۲)",
+        "address": "استان تهران، تهران، کلاهدوز، دیباجی جنوبی (محله اختیاریه)",
+        "categories": [
+          "Bakeries_Desserts_and_Sweets"
+        ],
+        "primaryCategory": "Bakeries_Desserts_and_Sweets",
+        "color": "#c48d55",
+        "instagramUrl": "https://www.instagram.com/halvachisweets",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.871,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The brand, South Dibaji address, and public phone match.",
+          "nameScore": 0.98,
+          "locationScore": 0.4,
+          "crowdId": "5f16a118d174b1555e4bdb915b019059"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.364693767437174,
+          35.75185321362647
+        ]
+      },
+      "properties": {
+        "username": "behzadrestaurant.ir",
+        "fullName": "کافه و رستوران بهزاد",
+        "biography": "غذای اصیل شمالی\nتهران شهرک غرب، جنب مرکز خرید پلاتین \nساعت کاری:۸‌صبح الی ۱۱ شب\nرزرو و دلیوری📞 ۱۵۹۱",
+        "address": "استان تهران، تهران، فرحزادی، سیمای ایران (محله ایوانک)",
+        "categories": [
+          "Cafes_and_Coffee_Shops",
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/behzadrestaurant.ir",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.381,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The Behzad northern-cuisine identity and Simaye Iran–Farahzadi branch evidence match.",
+          "nameScore": 0.4,
+          "locationScore": 0.143,
+          "crowdId": "c1a2207679deb09204ba0c22fbdf6155"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.41886621744033,
+          35.71901512181604
+        ]
+      },
+      "properties": {
+        "username": "jocafe.co",
+        "fullName": "Jo cafe | جو کافه",
+        "biography": "l enJOy therefore I am\n📍Qeytariyeh\n📍Sanaee \"Hi-FiCafe\"\n \nOrder : 88370236\nInfo : 22693500\n @jorestaurant.co",
+        "address": "استان تهران، تهران، میرزای شیرازی، نژادکی (محله قائم مقام - سنائی)",
+        "categories": [
+          "Cafes_and_Coffee_Shops"
+        ],
+        "primaryCategory": "Cafes_and_Coffee_Shops",
+        "color": "#a96f3a",
+        "instagramUrl": "https://www.instagram.com/jocafe.co",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 0.89,
+        "geocodeMethod": "neshan-pwa-search",
+        "matchDetails": {
+          "nameScore": 0.98,
+          "locationScore": 0.5,
+          "phoneMatch": false,
+          "margin": 0.346,
+          "crowdId": "232aace0c22bf1f19524c059d71b5404"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.42586898803712,
+          35.784465789794915
+        ]
+      },
+      "properties": {
+        "username": "zagcafebakery",
+        "fullName": "كافه نان زاگ",
+        "biography": "📍Golnar Tower,Elahieh,Tehran\nAt Zag cafe we offer the most delectable hot & cold drinks  with freshly baked Bread & pastries every day all year around",
+        "address": "استان تهران، تهران، نلسون ماندلا، گلنار (محله تجریش)",
+        "categories": [
+          "Cafes_and_Coffee_Shops"
+        ],
+        "primaryCategory": "Cafes_and_Coffee_Shops",
+        "color": "#a96f3a",
+        "instagramUrl": "https://www.instagram.com/zagcafebakery",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.745,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The exact venue name and Golnar Tower–Elahiyeh location match.",
+          "nameScore": 0.98,
+          "locationScore": 0,
+          "crowdId": "dd3d457a488592e33d082b35ff5acfd1"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.432645,
+          35.723698
+        ]
+      },
+      "properties": {
+        "username": "armenia.cafe",
+        "fullName": "⚜ A R M E N I A C A F E ⚜",
+        "biography": "یه کافه ارمنی تو طهرون\n🕰هر روز ۸ صبح تا ۱۱ شب\n📞تلفن رزرو:02188348489- 02188311142\n👇لینک منو و آدرس 👇",
+        "address": "👇لینک منو و آدرس 👇",
+        "categories": [
+          "Cafes_and_Coffee_Shops"
+        ],
+        "primaryCategory": "Cafes_and_Coffee_Shops",
+        "color": "#a96f3a",
+        "instagramUrl": "https://www.instagram.com/armenia.cafe",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 1,
+        "geocodeMethod": "direct-map-link",
+        "matchDetails": {
+          "directCoordinateLink": true
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.416337,
+          35.801375
+        ]
+      },
+      "properties": {
+        "username": "chopchoplounge",
+        "fullName": "Chop Chop Lounge | رستوران چاپ چاپ",
+        "biography": "‎📍 زعفرانیه , بعد از پسیان ، مقدس اردبیلی،پلاک ۲۵\n☎️ 22 42 35 37 \n☎️ 22 42 35 39 Reservation                    \n-----------\n‎☎️ 021-74412   شعبه ها",
+        "address": "‎📍 زعفرانیه , بعد از پسیان ، مقدس اردبیلی،پلاک ۲۵، ‎☎️ 021-74412   شعبه ها",
+        "categories": [
+          "Cafes_and_Coffee_Shops",
+          "Restaurants",
+          "Travel_Hotels_and_Events"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/chopchoplounge",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 1,
+        "geocodeMethod": "direct-map-link",
+        "matchDetails": {
+          "directCoordinateLink": true
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.416149,
+          35.80123
+        ]
+      },
+      "properties": {
+        "username": "moonloungecafe",
+        "fullName": "| M O O N   L O U N G E |",
+        "biography": "زعفرانيه،مقدس اردبيلي،پلاك ٢٥،طبقه اول    (   🔼    بالا   🔼   ) \nپذیرش 12ظهر الی ۱۲ شب\n⬇️منو دیجیتال ⬇️",
+        "address": "زعفرانيه،مقدس اردبيلي،پلاك ٢٥،طبقه اول    (   🔼    بالا   🔼   )",
+        "categories": [
+          "Cafes_and_Coffee_Shops"
+        ],
+        "primaryCategory": "Cafes_and_Coffee_Shops",
+        "color": "#a96f3a",
+        "instagramUrl": "https://www.instagram.com/moonloungecafe",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 1,
+        "geocodeMethod": "direct-map-link",
+        "matchDetails": {
+          "directCoordinateLink": true
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.4550391,
+          35.780160099999996
+        ]
+      },
+      "properties": {
+        "username": "8restaurant_cafe",
+        "fullName": "8 BBQ & cafe",
+        "biography": "کافه و باربیکیو هشت\n⏱8:00صبح 24:00بامداد\n📍خیابان دولت٫چهارراه قنات٫پلاک  251\n📱09126280899",
+        "address": "📍خیابان دولت٫چهارراه قنات٫پلاک  251",
+        "categories": [
+          "Cafes_and_Coffee_Shops",
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/8restaurant_cafe",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 1,
+        "geocodeMethod": "direct-map-link",
+        "matchDetails": {
+          "directCoordinateLink": true
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.42585852444158,
+          35.69241047000893
+        ]
+      },
+      "properties": {
+        "username": "takderakht.restaurant",
+        "fullName": "رستوران تک درخت",
+        "biography": "رستوران تک درخت تبریز (شعبه تهران)\n📍جمهوری، مرداس مال\nپارکینگ اختصاصی\nناهار ۱۲ - ۱۷\nشام ۱۹ - ۲۳\nکافه ۱۲ - ۲۳\n☎️02133939839\n☎️02136416620\n☎️02133532441",
+        "address": "استان تهران، تهران، جمهوری اسلامی (محله بهارستان)",
+        "categories": [
+          "Cafes_and_Coffee_Shops",
+          "Restaurants",
+          "Travel_Hotels_and_Events"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/takderakht.restaurant",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 0.517,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The profile’s public map link identifies the Tak Derakht Merdas–Jomhouri branch.",
+          "nameScore": 0.571,
+          "locationScore": 0.174,
+          "crowdId": "16a71b562de02038b907962f19ec4960"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.337989221466174,
+          35.75938349420219
+        ]
+      },
+      "properties": {
+        "username": "saraye_delroba",
+        "fullName": "سرای دلربا | Saraye Delroba",
+        "biography": "خلق لحظاتی ماندگار در قلب معماری ایرانی \n‌\nمیدان پونک، بلوار همیلا \n میزبان کافه رستوران‌های ایل‌پدره و دلربا \n📞۰۲۱ - ۴۴۴۸۳۸۰۵",
+        "address": "استان تهران، تهران، بزرگراه اشرفی اصفهانی، فلاح زاده (محله پونک)",
+        "categories": [
+          "Cafes_and_Coffee_Shops",
+          "Restaurants",
+          "Travel_Hotels_and_Events"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/saraye_delroba",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.636,
+        "geocodeMethod": "neshan-pwa-search",
+        "matchDetails": {
+          "nameScore": 0.571,
+          "locationScore": 0.167,
+          "phoneMatch": true,
+          "margin": 0.636,
+          "crowdId": "1c02fa4d7f8a9ca786a6e26e2658dc81"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.336113,
+          35.737402
+        ]
+      },
+      "properties": {
+        "username": "majid.butcher",
+        "fullName": "هایپر پروتئین مجید قصاب",
+        "biography": "📍آدرس: مرزداران، خیابان ابوالفضل , کوچه ولدخانی\n☎️: 02144250002 - 02144250004\nساعت کاری: 8:00 الی 22:00\n@studioalmas.ir \n| سفارش از طریق تماس تلفنی |",
+        "address": "📍آدرس: مرزداران، خیابان ابوالفضل , کوچه ولدخانی",
+        "categories": [
+          "Food_Products_Catering_and_Grocery"
+        ],
+        "primaryCategory": "Food_Products_Catering_and_Grocery",
+        "color": "#b75a3f",
+        "instagramUrl": "https://www.instagram.com/majid.butcher",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 1,
+        "geocodeMethod": "direct-map-link",
+        "matchDetails": {
+          "directCoordinateLink": true
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.457333264199974,
+          35.78005520332782
+        ]
+      },
+      "properties": {
+        "username": "kasekababardabil",
+        "fullName": "کاسه کباب اردبیل علی بابا",
+        "biography": "#طعم اصیل غذای اردبیل درتهران\nبااستفاده ازگوشت کره محلی اردبیل\n📍تهران پاسداران خ(دولت)نبش یارمحمدی\nپ195\n☎22559307-8-9\n⏰️12تا12شب\nیاشاسین#علی_دایی",
+        "address": "استان تهران، تهران، کلاهدوز، روبروی یارمحمدی، نبش کوچه حسينيه، پلاک ۱۹۵",
+        "categories": [
+          "Food_Products_Catering_and_Grocery",
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/kasekababardabil",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.717,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The Ali Baba identity, Dolat–Yarmohammadi address, plaque, and public phone match.",
+          "nameScore": 0.727,
+          "locationScore": 0.6,
+          "crowdId": "c97268577c4c861814d24f5464115e06"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.39936779999999,
+          35.76703479999999
+        ]
+      },
+      "properties": {
+        "username": "passata.tehran",
+        "fullName": "آشپزخانه‌ی پاساتا",
+        "biography": "⏰ ساعت کاری ۱۲:۰۰ - ۲۳:۰۰\n۰۲۱ ۸۸۰۴۵۴۵۷ ☎️\n📍خیابان خدامی، برج آفتاب، پلاک ۳۰",
+        "address": "استان تهران، تهران، سئول، ماهتاب، وسکانیان (محله ونک)",
+        "categories": [
+          "Food_Products_Catering_and_Grocery",
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/passata.tehran",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 0.303,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The distinctive Passata identity and Vanak location evidence match.",
+          "nameScore": 0.333,
+          "locationScore": 0,
+          "crowdId": "fa9f01a733354829c72a4a211c4ecaf3"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.05634112398237,
+          35.86087620068678
+        ]
+      },
+      "properties": {
+        "username": "sarashpaz.ham",
+        "fullName": "رستوران سرآشپزحم تیروژ",
+        "biography": "اقتصادی‌ترین پک‌های غذایی چندنفره 🍽️ \n👈🏻 ناهار و شام \n 📍آدرس : کرج ، ابتدای جاده چالوس ، کیلومتر ۶\n☎️ تماس:\n0991 505 0448\nپاسخگویی 11:00 الی 23:00",
+        "address": "البرز، شهرستان کرج، بخش آسارا، جاده چالوس",
+        "categories": [
+          "Food_Products_Catering_and_Grocery",
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/sarashpaz.ham",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.458,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The exact venue name, Karaj–Chalus Road location, and public phone match.",
+          "nameScore": 0.286,
+          "locationScore": 0.375,
+          "crowdId": "d711581d995ea6928af89994cff3944e"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.44949921425885,
+          35.78030637363247
+        ]
+      },
+      "properties": {
+        "username": "digikala_supermarket",
+        "fullName": "سوپرمارکت دیجی‌کالا",
+        "biography": "سوپرمارکت آنلاین و حضوری دیجی‌کالا\n📍آدرس سوپرمارکت حضوری دیجی‌کالا:\nتهران، خیابان دولت، ابتدای بلوار کاوه\n🍎🍉🍓🧅🥩🥫🍚🍫🍿🍭",
+        "address": "استان تهران، تهران، کلاهدوز، کاوه (محله اختیاریه)",
+        "categories": [
+          "Food_Products_Catering_and_Grocery",
+          "Home_Books_Gifts_and_Other_Retail"
+        ],
+        "primaryCategory": "Food_Products_Catering_and_Grocery",
+        "color": "#b75a3f",
+        "instagramUrl": "https://www.instagram.com/digikala_supermarket",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.382,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The physical supermarket identity and Dolat–Kaveh intersection match.",
+          "nameScore": 0.444,
+          "locationScore": 0.235,
+          "crowdId": "140e6957f88ad93359eb436e7b98c89d"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.420784470870736,
+          35.68519515664532
+        ]
+      },
+      "properties": {
+        "username": "mr.fishe.chef",
+        "fullName": "آقای ماهی‌ سرآشپز",
+        "biography": "غذاهای دريايي خاص در تهران \n09196909847",
+        "address": "استان تهران، تهران، امام خمینی، باب همایون (محله ارگ - پامنار)",
+        "categories": [
+          "Food_Products_Catering_and_Grocery"
+        ],
+        "primaryCategory": "Food_Products_Catering_and_Grocery",
+        "color": "#b75a3f",
+        "instagramUrl": "https://www.instagram.com/mr.fishe.chef",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.886,
+        "geocodeMethod": "neshan-pwa-search",
+        "matchDetails": {
+          "nameScore": 0.98,
+          "locationScore": 0.111,
+          "phoneMatch": true,
+          "margin": 0.379,
+          "crowdId": "34d7d4050a9bf184d069842f779d1f30"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.380394893920744,
+          35.7802856655057
+        ]
+      },
+      "properties": {
+        "username": "infodeniz",
+        "fullName": "مهاجرت تحصیلی | اینفودنیز",
+        "biography": "پذیرش تضمینی دبیرستان|کارشناسی|ارشد|دکتری|فرصت و پستداک \n🌍🇺🇸🇩🇪🇬🇧🇦🇹🇮🇹🇨🇦🇫🇦🇺🇧🇪🇪\n۰۲۱- ۹۱۰۷۴۱۷۷ دفتر\n۰۹۳۶۷۶۶۴۷۳۲\nپیام در واتساپ یا بله) مشاوره رایگان )👆",
+        "address": "استان تهران، تهران، سعادت آباد، کوروش (16)، علامه طباطبایی شمالی (محله مدیریت)",
+        "categories": [
+          "Health_Medical_and_Wellness",
+          "Immigration_Legal_and_Finance"
+        ],
+        "primaryCategory": "Immigration_Legal_and_Finance",
+        "color": "#536a8b",
+        "instagramUrl": "https://www.instagram.com/infodeniz",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.865,
+        "geocodeMethod": "neshan-pwa-search",
+        "matchDetails": {
+          "nameScore": 0.98,
+          "locationScore": 0,
+          "phoneMatch": true,
+          "margin": 0.865,
+          "crowdId": "931805e98648af9c58a1c75439b99f1d"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.433469822269,
+          35.7199896468616
+        ]
+      },
+      "properties": {
+        "username": "aryanaghalam",
+        "fullName": "انتشارات آریاناقلم",
+        "biography": "‌\n📚 ناشر کتاب‌های برتر مدیریت و کسب‌وکار \n‌☎️ 021-88342910‌\n📍آدرس: تهران، سهروردی جنوبی، ملایری‌پور غربی، پلاک ۳۷\nراه‌های ارتباطی ما:",
+        "address": "استان تهران، تهران، سهروردی جنوبی، ملایری پور (محله سهروردی - باغ صبا)",
+        "categories": [
+          "Home_Books_Gifts_and_Other_Retail",
+          "Media_News_and_Publishing"
+        ],
+        "primaryCategory": "Home_Books_Gifts_and_Other_Retail",
+        "color": "#7c6a51",
+        "instagramUrl": "https://www.instagram.com/aryanaghalam",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.359,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The exact publisher name and South Sohrevardi–Malayerypour address match.",
+          "nameScore": 0.333,
+          "locationScore": 0.556,
+          "crowdId": "78a8d426d8a62ebf215c0d3551ec330e"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.4109087,
+          35.76294620000001
+        ]
+      },
+      "properties": {
+        "username": "apple.almas.pro",
+        "fullName": "الماس پایتخت",
+        "biography": "‏‎‌‌‏فروش‌ و خدمات محصولات اپل  ‏‎‌‌‏   \nلیست قیمتـ 👈🏻 « دایرکت قیمت روز دستگاه ها »\nمجوز رسمی کسب‌و‌کار مجازی، نماد اعتماد سایت\n021-88881218",
+        "address": "استان تهران، تهران، بلوار میرداماد (محله کاووسیه)",
+        "categories": [
+          "Home_Books_Gifts_and_Other_Retail"
+        ],
+        "primaryCategory": "Home_Books_Gifts_and_Other_Retail",
+        "color": "#7c6a51",
+        "instagramUrl": "https://www.instagram.com/apple.almas.pro",
+        "evidenceStrength": "repeated-post-location",
+        "geocodeConfidence": 0.745,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The Almas Paytakht identity and Mirdamad–Eskan retailer address match.",
+          "nameScore": 0.98,
+          "locationScore": 0,
+          "crowdId": "1b94e3315613219d48eee76b7413bc54"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.44591019999999,
+          35.80409809999999
+        ]
+      },
+      "properties": {
+        "username": "chaibartehran",
+        "fullName": "چایبار",
+        "biography": "اینجا؛ اصل ماجرا خاطره ساختنه.🍀\n📍اندرزگو، سلیمی شمالی، پلاک ۱۴۵.\n 9:30 am - 11:15 pm | +21 22210311",
+        "address": "استان تهران، تهران، دزاشیب، کریمی، سلیمی شمالی (محله دزاشیب - حکمت)",
+        "categories": [
+          "Immigration_Legal_and_Finance",
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/chaibartehran",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.174,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The Salimi North–Dezashib address and public phone match.",
+          "nameScore": 0,
+          "locationScore": 0.286,
+          "crowdId": "3476dae0d84f8a19f73722662891dcb8"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.43079508320104,
+          35.814234569733244
+        ]
+      },
+      "properties": {
+        "username": "carbonfoodpark",
+        "fullName": "Carbon | فود‌پاركـ‌‌ كربن",
+        "biography": "تجربه‌های جدید،طعم‌های متفاوت‌ و ارتباط ماندگار\n|\nآدرس : خيابان دربند ، نبش كوچه يغما ، ساختمان فرمهر ، طبقه همكف",
+        "address": "استان تهران، تهران، باهنر، دربند، یغما (محله دربند)",
+        "categories": [
+          "Marketing_Design_and_Business_Services"
+        ],
+        "primaryCategory": "Marketing_Design_and_Business_Services",
+        "color": "#7f5e8a",
+        "instagramUrl": "https://www.instagram.com/carbonfoodpark",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 0.301,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The exact venue name and Darband–Yaghma address match.",
+          "nameScore": 0.333,
+          "locationScore": 0.25,
+          "crowdId": "cdfafb282593920a3bd843b60a97c341"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.360161,
+          35.76897
+        ]
+      },
+      "properties": {
+        "username": "hamfazpizza",
+        "fullName": "هم فاز",
+        "biography": "Slice of love \nشهرک غرب 📍\nونک پارک 📍",
+        "address": "",
+        "categories": [
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/hamfazpizza",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 1,
+        "geocodeMethod": "direct-map-link",
+        "matchDetails": {
+          "directCoordinateLink": true
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.49142646167704,
+          35.730517897715536
+        ]
+      },
+      "properties": {
+        "username": "sinisushi",
+        "fullName": "سینی سوشی",
+        "biography": "シニ寿司\nپذیرای حضور گرمتان در سوشی بار کوچکمان \nهستیم\n📍هفت حوض گلبرگ غربی پلاک ۴۰\n۰۲۱۷۷۹۱۲۱۵۷",
+        "address": "استان تهران، تهران، بزرگراه شهید سلیمانی، دکتر آیت شمالی، جانبازان غربی (محله هفت حوض)",
+        "categories": [
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/sinisushi",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 0.839,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The exact venue name and Haft Hoz–Golbarg location match.",
+          "nameScore": 0.98,
+          "locationScore": 0.231,
+          "crowdId": "35b064451f77d376fd81a335cc21f6ab"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.31912887635511,
+          35.72826653929328
+        ]
+      },
+      "properties": {
+        "username": "asilnabbonab",
+        "fullName": "کبابخانه اصیل ناب بناب",
+        "biography": "کباب ذغالی اصیل بناب، نان داغ \n🏠آدرس: صادقیه آیت الله کاشانی نبش دانشفر.\n📞راه ارتباطی:۰۹۱۲۴۹۹۹۴۴۳\n☎️سفارش:۴۴۹۶۱۱۲۵ /۴۴۹۶۱۱۲۶/ ۴۴۹۶۱۱۲۷",
+        "address": "تهران، بلوار آیت الله کاشانی، دانشفر، پلاک ۱",
+        "categories": [
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/asilnabbonab",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 0.568,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The distinctive business name and Kashani–Daneshfar address match.",
+          "nameScore": 0.6,
+          "locationScore": 0.588,
+          "crowdId": "6e21570b1c7fbaac02c3005160ad35dc"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.41108193221946,
+          35.73171473447908
+        ]
+      },
+      "properties": {
+        "username": "nayebsaei",
+        "fullName": "نایب ساعی",
+        "biography": "☎️ ۵۷۲۳۲\n۰۲۱_۸۸۷۱۳۴۷۴\nتلفن رزرو: ۰۹۱۰۴۹۹۴۸۶۵\nخيابان ولى عصر، بالاتر از سه راه دكتر بهشتى، پايين تر از پارك ساعى، پلاك ٢٢٢٠\nSince 1875",
+        "address": "استان تهران، تهران، ولیعصر، اکبری (محله یوسف آباد)",
+        "categories": [
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/nayebsaei",
+        "evidenceStrength": "repeated-post-location",
+        "geocodeConfidence": 0.862,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The exact venue name and Valiasr–Saei area evidence match.",
+          "nameScore": 0.98,
+          "locationScore": 0.353,
+          "crowdId": "6e386ca4f582dcd4610b0ed12b4126a4"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.42519634011964,
+          35.784150172288136
+        ]
+      },
+      "properties": {
+        "username": "su_cuisine.ir",
+        "fullName": "Sushi Tehran |🥢 سوشی سو",
+        "biography": "طعم سوشی تازه🍣\nارسال به سراسر تهران و حومه 🛵\nپذیرایی تشریفاتی میهمانی و ایونت‌ها🥢\n📞0910-255 0 993\n📌الهیه، گلنار، ماهرو، بن بست فروردین\nمنو دیجیتال👇🏻",
+        "address": "استان تهران، تهران، نلسون ماندلا، گلنار، ماهرو، فروردین (محله تجریش)",
+        "categories": [
+          "Restaurants",
+          "Travel_Hotels_and_Events"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/su_cuisine.ir",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.426,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The Sushi Su identity and Golnar–Mahroo–Farvardin address sequence match.",
+          "nameScore": 0.444,
+          "locationScore": 0.2,
+          "crowdId": "c5644f736c4a5d6d5d19a9d8886a3d6a"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.42438888549805,
+          35.79306411743163
+        ]
+      },
+      "properties": {
+        "username": "nakaya.sushi",
+        "fullName": "Nakaya |  رستوران ناکایا",
+        "biography": "فرشته، خیابان آقابزرگی، پلاک ۲۱\nReservation:\n021-26372507 \nDelivery:\n021-26372797\nA member of @popcorngroup.ir\n.\nNakaya Digital menu 🔽",
+        "address": "استان تهران، تهران، ولیعصر، فیاضی، شبدیز، آقابزرگی (محله الهیه)",
+        "categories": [
+          "Restaurants",
+          "Travel_Hotels_and_Events"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/nakaya.sushi",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.392,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The Nakaya identity and Aghabozorgi–Fereshteh address select this branch.",
+          "nameScore": 0.4,
+          "locationScore": 0.2,
+          "crowdId": "b02e6af52b7e3bd6ce9d243d4115574d"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          54.364094,
+          31.828755
+        ]
+      },
+      "properties": {
+        "username": "darvish_pitzza",
+        "fullName": "پیتزا درویش|یزد|فست فود",
+        "biography": "با پیتزا درویش رویاهایتان به واقعیت تبدیل می‌شود🍕\nآدرس:صفاییه-بلوار شهیدان اشرف-روبروی ورودی دانشگاه یزد\nساعت کاری (19:30الی 12:30شب)\n☎️035-3833-4080",
+        "address": "آدرس:صفاییه-بلوار شهیدان اشرف-روبروی ورودی دانشگاه یزد",
+        "categories": [
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/darvish_pitzza",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 1,
+        "geocodeMethod": "direct-map-link",
+        "matchDetails": {
+          "directCoordinateLink": true
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          50.84327289765147,
+          34.61296596959138
+        ]
+      },
+      "properties": {
+        "username": "salsapizza.ir",
+        "fullName": "پیتزا سالسا",
+        "biography": "اولین پیتزا کشویی تخصصی در قم\nهر اسلایس یک لبخند 😍\ndelivery 🛵\n0939 021 4002",
+        "address": "استان قم، قم، بلوار شهیدان گلستانه، اقاقیا، اقاقیا 1 (محله سالاریه)",
+        "categories": [
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/salsapizza.ir",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.84,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The exact venue name, Qom city, and Salarieh location match.",
+          "nameScore": 0.98,
+          "locationScore": 0.235,
+          "crowdId": "79e24865550dde0642024049e5efb3f4"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.4334188,
+          35.707167199999994
+        ]
+      },
+      "properties": {
+        "username": "laneh.kaboutar",
+        "fullName": "رستوران سنتی لانه کبوتر",
+        "biography": "😍تجربه ای متفاوت از پذیرایی سنتی\n آدرس 👈شریعتی جنوب نبش سه راه طالقانی روبروی بانک ملی \n #رستوران_لانه_کبوتر\n  تماس:02177535550\n09198193237",
+        "address": "استان تهران، تهران، شریعتی، طالقانی (محله بهار)",
+        "categories": [
+          "Restaurants",
+          "Travel_Hotels_and_Events"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/laneh.kaboutar",
+        "evidenceStrength": "public-address",
+        "geocodeConfidence": 0.532,
+        "geocodeMethod": "manual-review",
+        "matchDetails": {
+          "reviewed": true,
+          "reason": "The exact venue name and Shariati–Taleghani intersection match.",
+          "nameScore": 0.571,
+          "locationScore": 0.25,
+          "crowdId": "220058da2bc35857c08d97b1c8fba39f"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.4524715,
+          35.800057
+        ]
+      },
+      "properties": {
+        "username": "bellanotte.tehran",
+        "fullName": "",
+        "biography": "بلا نوتّه | ساندویچ ایتالیایی 🇮🇹\n⏰13:30 / 24:00\n☎️ 0912-4138838\n📍 اندرزگو سلیمی جنوبی پلاک ۵۴",
+        "address": "📍 اندرزگو سلیمی جنوبی پلاک ۵۴",
+        "categories": [
+          "Restaurants"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/bellanotte.tehran",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 1,
+        "geocodeMethod": "direct-map-link",
+        "matchDetails": {
+          "directCoordinateLink": true
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.457407,
+          35.802104
+        ]
+      },
+      "properties": {
+        "username": "kassab.iran",
+        "fullName": "KASSAB Restaurant | رستوران کساب",
+        "biography": "تنها شعبه رسمی رستوران کساب در ایران🇹🇷🇮🇷\nبلوار اندرزگو - سانا سنتر 📍\nOperation Hours: 12:00 - 23:00\nReservation Number: 1870",
+        "address": "تنها شعبه رسمی رستوران کساب در ایران🇹🇷🇮🇷، بلوار اندرزگو - سانا سنتر 📍",
+        "categories": [
+          "Restaurants",
+          "Travel_Hotels_and_Events"
+        ],
+        "primaryCategory": "Restaurants",
+        "color": "#9f3d2f",
+        "instagramUrl": "https://www.instagram.com/kassab.iran",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 1,
+        "geocodeMethod": "direct-map-link",
+        "matchDetails": {
+          "directCoordinateLink": true
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          52.8915027,
+          36.3401348
+        ]
+      },
+      "properties": {
+        "username": "mizbanforest",
+        "fullName": "هتل جنگلی میزبان | Mizban Forest",
+        "biography": "📍مازندران، سوادکوه شمالی، شیرگاه، اندارگلی\n 011-4243-9203☎️",
+        "address": "📍مازندران، سوادکوه شمالی، شیرگاه، اندارگلی",
+        "categories": [
+          "Travel_Hotels_and_Events"
+        ],
+        "primaryCategory": "Travel_Hotels_and_Events",
+        "color": "#3d7890",
+        "instagramUrl": "https://www.instagram.com/mizbanforest",
+        "evidenceStrength": "direct-map-link",
+        "geocodeConfidence": 1,
+        "geocodeMethod": "direct-map-link",
+        "matchDetails": {
+          "directCoordinateLink": true
+        }
+      }
+    }
+  ]
 }

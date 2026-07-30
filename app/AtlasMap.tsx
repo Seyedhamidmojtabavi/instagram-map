@@ -356,7 +356,7 @@ export function AtlasMap({ webKey }: { webKey: string }) {
 
         <div className="stat-grid" aria-label="Map statistics">
           <div><strong>903</strong><span>profiles read</span></div>
-          <div><strong>{collection.features.length}</strong><span>verified places</span></div>
+          <div><strong>{collection.features.length}</strong><span>matched places</span></div>
           <div><strong>21</strong><span>map layers</span></div>
         </div>
 
@@ -443,9 +443,9 @@ export function AtlasMap({ webKey }: { webKey: string }) {
 
         {!webKey && (
           <div className="map-setup-note">
-            <p className="eyebrow">READY FOR VERIFIED LOCATIONS</p>
+            <p className="eyebrow">READY FOR MATCHED LOCATIONS</p>
             <strong>The atlas is built. Connect Neshan to bring it to life.</strong>
-            <span>Add your web key locally, then run the location enrichment script with your service key.</span>
+            <span>Add your web key locally, then run the anonymous Neshan enrichment script.</span>
           </div>
         )}
 
@@ -476,7 +476,7 @@ export function AtlasMap({ webKey }: { webKey: string }) {
         ) : collection.features.length > 0 ? (
           <div className="empty-card">
             <span>+</span>
-            <p>Select a pin to open its profile and verified address.</p>
+            <p>Select a pin to open its profile and matched public address.</p>
           </div>
         ) : null}
       </section>

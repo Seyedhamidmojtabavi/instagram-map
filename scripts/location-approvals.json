@@ -1,0 +1,152 @@
+{
+  "description": "Human-reviewed Neshan matches. Exact title, address, and coordinates must still be present in the current search result before a pin is accepted.",
+  "approvals": [
+    {
+      "username": "asilnabbonab",
+      "title": "کباب خانه اصیل ناب بناب",
+      "address": "تهران، بلوار آیت الله کاشانی، دانشفر، پلاک ۱",
+      "coordinates": [51.31912887635511, 35.72826653929328],
+      "reason": "The distinctive business name and Kashani–Daneshfar address match."
+    },
+    {
+      "username": "behzadrestaurant.ir",
+      "title": "رستوران گیلکی بهزاد",
+      "address": "استان تهران، تهران، فرحزادی، سیمای ایران (محله ایوانک)",
+      "coordinates": [51.364693767437174, 35.75185321362647],
+      "reason": "The Behzad northern-cuisine identity and Simaye Iran–Farahzadi branch evidence match."
+    },
+    {
+      "username": "halvachisweets",
+      "title": "حلواچی",
+      "address": "استان تهران، تهران، کلاهدوز، دیباجی جنوبی (محله اختیاریه)",
+      "coordinates": [51.459607894424714, 35.784305707431265],
+      "reason": "The brand, South Dibaji address, and public phone match."
+    },
+    {
+      "username": "jahanekoochakeman_emarat",
+      "title": "کافه عمارت جهان کوچک من",
+      "address": "استان تهران، تهران، انقلاب اسلامی، موسوی، ایرانشهر (محله ایرانشهر)",
+      "coordinates": [51.420574277482444, 35.708062503902],
+      "reason": "The exact venue name, Mousavi–IranShahr address, and public phone match."
+    },
+    {
+      "username": "kasekababardabil",
+      "title": "کبابی علی بابا (کاسه کبابی اردبیل)",
+      "address": "استان تهران، تهران، کلاهدوز، روبروی یارمحمدی، نبش کوچه حسينيه، پلاک ۱۹۵",
+      "coordinates": [51.457333264199974, 35.78005520332782],
+      "reason": "The Ali Baba identity, Dolat–Yarmohammadi address, plaque, and public phone match."
+    },
+    {
+      "username": "laneh.kaboutar",
+      "title": "رستوران لانه کبوتر",
+      "address": "استان تهران، تهران، شریعتی، طالقانی (محله بهار)",
+      "coordinates": [51.4334188, 35.707167199999994],
+      "reason": "The exact venue name and Shariati–Taleghani intersection match."
+    },
+    {
+      "username": "majid.butcher",
+      "title": "هایپر پروتئین مجید قصاب ",
+      "address": "بزرگراه اشرفی اصفهانی، ولدخانی، پلاک ۸",
+      "coordinates": [51.336128095272635, 35.737321380325746],
+      "reason": "The exact business name, Voldkhani address, and public phone match."
+    },
+    {
+      "username": "nakaya.sushi",
+      "title": "رستوران آسیایی ناکایا",
+      "address": "استان تهران، تهران، ولیعصر، فیاضی، شبدیز، آقابزرگی (محله الهیه)",
+      "coordinates": [51.42438888549805, 35.79306411743163],
+      "reason": "The Nakaya identity and Aghabozorgi–Fereshteh address select this branch."
+    },
+    {
+      "username": "nayebsaei",
+      "title": "رستوران نایب ساعی",
+      "address": "استان تهران، تهران، ولیعصر، اکبری (محله یوسف آباد)",
+      "coordinates": [51.41108193221946, 35.73171473447908],
+      "reason": "The exact venue name and Valiasr–Saei area evidence match."
+    },
+    {
+      "username": "salsapizza.ir",
+      "title": "پیتزا سالسا",
+      "address": "استان قم، قم، بلوار شهیدان گلستانه، اقاقیا، اقاقیا 1 (محله سالاریه)",
+      "coordinates": [50.84327289765147, 34.61296596959138],
+      "reason": "The exact venue name, Qom city, and Salarieh location match."
+    },
+    {
+      "username": "sinisushi",
+      "title": "سینی سوشی",
+      "address": "استان تهران، تهران، بزرگراه شهید سلیمانی، دکتر آیت شمالی، جانبازان غربی (محله هفت حوض)",
+      "coordinates": [51.49142646167704, 35.730517897715536],
+      "reason": "The exact venue name and Haft Hoz–Golbarg location match."
+    },
+    {
+      "username": "su_cuisine.ir",
+      "title": "رستوران آسیایی سوشی سو",
+      "address": "استان تهران، تهران، نلسون ماندلا، گلنار، ماهرو، فروردین (محله تجریش)",
+      "coordinates": [51.42519634011964, 35.784150172288136],
+      "reason": "The Sushi Su identity and Golnar–Mahroo–Farvardin address sequence match."
+    },
+    {
+      "username": "takderakht.restaurant",
+      "title": "کافه رستوران مجلل تک درخت",
+      "address": "استان تهران، تهران، جمهوری اسلامی (محله بهارستان)",
+      "coordinates": [51.42585852444158, 35.69241047000893],
+      "reason": "The profile’s public map link identifies the Tak Derakht Merdas–Jomhouri branch."
+    },
+    {
+      "username": "zagcafebakery",
+      "title": "کافه نان زاگ",
+      "address": "استان تهران، تهران، نلسون ماندلا، گلنار (محله تجریش)",
+      "coordinates": [51.42586898803712, 35.784465789794915],
+      "reason": "The exact venue name and Golnar Tower–Elahiyeh location match."
+    },
+    {
+      "username": "apple.almas.pro",
+      "title": "فروشگاه الماس پایتخت",
+      "address": "استان تهران، تهران، بلوار میرداماد (محله کاووسیه)",
+      "coordinates": [51.4109087, 35.76294620000001],
+      "reason": "The Almas Paytakht identity and Mirdamad–Eskan retailer address match."
+    },
+    {
+      "username": "aryanaghalam",
+      "title": "انتشارات آریانا قلم",
+      "address": "استان تهران، تهران، سهروردی جنوبی، ملایری پور (محله سهروردی - باغ صبا)",
+      "coordinates": [51.433469822269, 35.7199896468616],
+      "reason": "The exact publisher name and South Sohrevardi–Malayerypour address match."
+    },
+    {
+      "username": "carbonfoodpark",
+      "title": "فود پارک کربن",
+      "address": "استان تهران، تهران، باهنر، دربند، یغما (محله دربند)",
+      "coordinates": [51.43079508320104, 35.814234569733244],
+      "reason": "The exact venue name and Darband–Yaghma address match."
+    },
+    {
+      "username": "chaibartehran",
+      "title": "کافه چای بار",
+      "address": "استان تهران، تهران، دزاشیب، کریمی، سلیمی شمالی (محله دزاشیب - حکمت)",
+      "coordinates": [51.44591019999999, 35.80409809999999],
+      "reason": "The Salimi North–Dezashib address and public phone match."
+    },
+    {
+      "username": "digikala_supermarket",
+      "title": "سوپر مارکت دیجی کالا",
+      "address": "استان تهران، تهران، کلاهدوز، کاوه (محله اختیاریه)",
+      "coordinates": [51.44949921425885, 35.78030637363247],
+      "reason": "The physical supermarket identity and Dolat–Kaveh intersection match."
+    },
+    {
+      "username": "passata.tehran",
+      "title": "پاستای دست‌ ساز پاساتا",
+      "address": "استان تهران، تهران، سئول، ماهتاب، وسکانیان (محله ونک)",
+      "coordinates": [51.39936779999999, 35.76703479999999],
+      "reason": "The distinctive Passata identity and Vanak location evidence match."
+    },
+    {
+      "username": "sarashpaz.ham",
+      "title": "رستوران سرآشپز حم تیروژ",
+      "address": "البرز، شهرستان کرج، بخش آسارا، جاده چالوس",
+      "coordinates": [51.05634112398237, 35.86087620068678],
+      "reason": "The exact venue name, Karaj–Chalus Road location, and public phone match."
+    }
+  ]
+}
