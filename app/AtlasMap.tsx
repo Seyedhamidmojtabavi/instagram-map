@@ -87,7 +87,7 @@ function categoryColor(id: string) {
   return categoryById.get(id)?.color ?? "#6f695f";
 }
 
-export function AtlasMap() {
+export function AtlasMap({ webKey }: { webKey: string }) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<NeshanMapInstance | null>(null);
   const collectionRef = useRef<AtlasCollection>(emptyCollection());
@@ -100,8 +100,6 @@ export function AtlasMap() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mapReady, setMapReady] = useState(false);
   const [mapError, setMapError] = useState("");
-
-  const webKey = process.env.NEXT_PUBLIC_NESHAN_WEB_KEY;
 
   useEffect(() => {
     fetch("/locations.geojson")

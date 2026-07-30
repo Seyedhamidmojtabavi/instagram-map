@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 
 const page = await readFile(new URL("../app/AtlasMap.tsx", import.meta.url), "utf8");
+const route = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
 const geocoder = await readFile(new URL("../scripts/geocode-neshan.mjs", import.meta.url), "utf8");
 const candidates = await readFile(new URL("../scripts/build-location-candidates.mjs", import.meta.url), "utf8");
 
@@ -12,7 +13,7 @@ test("the Atlas UI contains the core map experience", () => {
   assert.match(page, /Restaurants/);
   assert.match(page, /Cafés & coffee shops/);
   assert.match(page, /READY FOR VERIFIED LOCATIONS/);
-  assert.match(page, /NEXT_PUBLIC_NESHAN_WEB_KEY/);
+  assert.match(route, /NEXT_PUBLIC_NESHAN_WEB_KEY/);
   assert.match(page, /cluster: true/);
   assert.match(page, /Open in Neshan/);
   assert.doesNotMatch(page, /SkeletonPreview|codex-preview/);
