@@ -18,6 +18,7 @@ test("the Atlas UI contains the core map experience", () => {
   assert.match(page, /Cafés & coffee shops/);
   assert.match(page, /READY FOR MATCHED LOCATIONS/);
   assert.match(route, /NEXT_PUBLIC_NESHAN_WEB_KEY/);
+  assert.match(route, /force-dynamic/);
   assert.match(page, /cluster: true/);
   assert.match(page, /Open in Neshan/);
   assert.doesNotMatch(page, /SkeletonPreview|codex-preview/);
