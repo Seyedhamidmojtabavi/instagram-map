@@ -7,6 +7,12 @@ const route = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8"
 const geocoder = await readFile(new URL("../scripts/geocode-neshan.mjs", import.meta.url), "utf8");
 const candidates = await readFile(new URL("../scripts/build-location-candidates.mjs", import.meta.url), "utf8");
 const worker = await readFile(new URL("../worker/index.ts", import.meta.url), "utf8");
+const lockfile = JSON.parse(
+  await readFile(new URL("../package-lock.json", import.meta.url), "utf8"),
+);
+const railpack = JSON.parse(
+  await readFile(new URL("../railpack.json", import.meta.url), "utf8"),
+);
 const approvals = JSON.parse(
   await readFile(new URL("../scripts/location-approvals.json", import.meta.url), "utf8"),
 );
@@ -49,4 +55,21 @@ test("the enrichment pipeline uses the anonymous PWA route and queues uncertain 
   assert.match(candidates, /Personal and creator accounts are never located/);
   assert.match(candidates, /hasExplicitPublicEvidence && hasBusinessEvidence/);
   assert.match(candidates, /isAllowedPublicMapUrl/);
+});
+
+test("the Railway install is reproducible and includes build tooling", () => {
+  const malformedPackages = Object.entries(lockfile.packages).filter(
+    ([path, packageRecord]) =>
+      path && !packageRecord.version && !packageRecord.link,
+  );
+
+  assert.deepEqual(malformedPackages, []);
+  assert.equal(
+    railpack.steps.install.commands[0].cmd,
+    "npm ci --include=dev",
+  );
+  assert.equal(
+    railpack.steps.install.commands[1].path,
+    "node_modules/.bin",
+  );
 });
