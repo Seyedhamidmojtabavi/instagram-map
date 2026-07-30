@@ -1,15 +1,3 @@
-type AssetFetcher = {
-  fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
-};
+import handler from "vinext/server/app-router-entry";
 
-type WorkerEnvironment = {
-  ASSETS: AssetFetcher;
-};
-
-const worker = {
-  fetch(request: Request, environment: WorkerEnvironment): Promise<Response> {
-    return environment.ASSETS.fetch(request);
-  },
-};
-
-export default worker;
+export default handler;

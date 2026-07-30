@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Vazirmatn } from "next/font/google";
-import { headers } from "next/headers";
 import "@neshan-maps-platform/mapbox-gl/dist/NeshanMapboxGl.css";
 import "./globals.css";
 
@@ -15,41 +14,36 @@ const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const incoming = await headers();
-  const host =
-    incoming.get("x-forwarded-host") ??
-    incoming.get("host") ??
-    "localhost:3000";
-  const protocol =
-    incoming.get("x-forwarded-proto") ??
-    (host.startsWith("localhost") ? "http" : "https");
-  const origin = `${protocol}://${host}`;
-  const imageUrl = new URL("/og.png", origin).toString();
+const productionOrigin =
+  "https://following-atlas-iran-903.s-hamidreza-mojtabav.chatgpt.site";
 
-  return {
-    metadataBase: new URL(origin),
-    title: "Following Atlas — Public places across Iran",
-    description:
-      "A curated, filterable map of public businesses and venues discovered through 903 Instagram profiles.",
-    icons: {
-      icon: "/favicon.svg",
-      shortcut: "/favicon.svg",
-    },
-    openGraph: {
-      title: "Following Atlas",
-      description: "A curated map of public places across Iran.",
-      type: "website",
-      images: [{ url: imageUrl, width: 1740, height: 900, alt: "Following Atlas — Public places across Iran" }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: "Following Atlas",
-      description: "A curated map of public places across Iran.",
-      images: [imageUrl],
-    },
-  };
-}
+export const metadata: Metadata = {
+  metadataBase: new URL(productionOrigin),
+  title: "Following Atlas — Public places across Iran",
+  description:
+    "A curated, filterable map of public businesses and venues discovered through 903 Instagram profiles.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+  },
+  openGraph: {
+    title: "Following Atlas",
+    description: "A curated map of public places across Iran.",
+    type: "website",
+    images: [{
+      url: "/og.png",
+      width: 1740,
+      height: 900,
+      alt: "Following Atlas — Public places across Iran",
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Following Atlas",
+    description: "A curated map of public places across Iran.",
+    images: ["/og.png"],
+  },
+};
 
 export default function RootLayout({
   children,

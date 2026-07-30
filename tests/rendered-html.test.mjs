@@ -6,6 +6,7 @@ const page = await readFile(new URL("../app/AtlasMap.tsx", import.meta.url), "ut
 const route = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
 const geocoder = await readFile(new URL("../scripts/geocode-neshan.mjs", import.meta.url), "utf8");
 const candidates = await readFile(new URL("../scripts/build-location-candidates.mjs", import.meta.url), "utf8");
+const worker = await readFile(new URL("../worker/index.ts", import.meta.url), "utf8");
 const approvals = JSON.parse(
   await readFile(new URL("../scripts/location-approvals.json", import.meta.url), "utf8"),
 );
@@ -20,6 +21,8 @@ test("the Atlas UI contains the core map experience", () => {
   assert.match(page, /cluster: true/);
   assert.match(page, /Open in Neshan/);
   assert.doesNotMatch(page, /SkeletonPreview|codex-preview/);
+  assert.match(worker, /vinext\/server\/app-router-entry/);
+  assert.doesNotMatch(worker, /environment\.ASSETS\.fetch/);
 });
 
 test("the enrichment pipeline uses the anonymous PWA route and queues uncertain matches", () => {
