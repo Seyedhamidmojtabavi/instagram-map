@@ -30,9 +30,9 @@ Add the web key to `.env.local`:
    key.
 
 `railway.toml` configures Railpack to build with `npm run build`, start with
-`npm run start`, and health-check the root route. `railpack.json` installs the
-locked development dependencies required by the Vinext build and production
-server, even when Railway is configured for production-only npm installs.
+`npm run start`, and health-check the root route. `.npmrc` keeps the Vinext and
+Vite build tools available even when Railway is configured for production-only
+npm installs.
 
 ## Location workflow
 
