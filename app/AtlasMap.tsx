@@ -69,7 +69,11 @@ const categories: Category[] = [
 ];
 
 const categoryById = new Map(categories.map((category) => [category.id, category]));
-const allCategoryIds = new Set(categories.map((category) => category.id));
+const allCategoryIds = categories.map((category) => category.id);
+
+function createAllCategorySet() {
+  return new Set(allCategoryIds);
+}
 
 const fallbackPins = [
   { left: "61%", top: "35%", count: "48", color: "#9f3d2f" },
@@ -93,7 +97,7 @@ export function AtlasMap({ webKey }: { webKey: string }) {
   const collectionRef = useRef<AtlasCollection>(emptyCollection());
   const [collection, setCollection] = useState<AtlasCollection>(emptyCollection);
   const [activeCategories, setActiveCategories] = useState<Set<string>>(
-    () => new Set(allCategoryIds),
+    createAllCategorySet,
   );
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<AtlasPlace | null>(null);
@@ -107,7 +111,10 @@ export function AtlasMap({ webKey }: { webKey: string }) {
         if (!response.ok) throw new Error("Location data could not be loaded.");
         return response.json();
       })
-      .then((data: AtlasCollection) => setCollection(data))
+      .then((data: AtlasCollection) => {
+        setCollection(data);
+        setActiveCategories(createAllCategorySet());
+      })
       .catch((error) => setMapError(error.message));
   }, []);
 
@@ -366,7 +373,7 @@ export function AtlasMap({ webKey }: { webKey: string }) {
             <p>{activeCategories.size} of 21 visible</p>
           </div>
           <div className="layer-actions">
-            <button type="button" onClick={() => setActiveCategories(new Set(allCategoryIds))}>All</button>
+            <button type="button" onClick={() => setActiveCategories(createAllCategorySet())}>All</button>
             <button type="button" onClick={() => setActiveCategories(new Set())}>None</button>
           </div>
         </div>

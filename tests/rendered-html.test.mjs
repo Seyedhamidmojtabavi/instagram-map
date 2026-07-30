@@ -21,6 +21,7 @@ test("the Atlas UI contains the core map experience", () => {
   assert.match(route, /force-dynamic/);
   assert.match(page, /cluster: true/);
   assert.match(page, /Open in Neshan/);
+  assert.match(page, /setActiveCategories\(createAllCategorySet\(\)\)/);
   assert.doesNotMatch(page, /SkeletonPreview|codex-preview/);
   assert.match(worker, /vinext\/server\/app-router-entry/);
   assert.doesNotMatch(worker, /environment\.ASSETS\.fetch/);
