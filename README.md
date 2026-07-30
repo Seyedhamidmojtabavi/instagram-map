@@ -20,6 +20,18 @@ Add the web key to `.env.local`:
 - `NEXT_PUBLIC_NESHAN_WEB_KEY` renders the Neshan map in the browser. Restrict
   this key to your local and production domains in the Neshan developer panel.
 
+## Deploy on Railway
+
+1. Create a Railway service from this GitHub repository.
+2. Add `NEXT_PUBLIC_NESHAN_WEB_KEY` to the service variables. It must be
+   available during the build because the map runs in the browser.
+3. Deploy the service, then generate a public domain under Railway networking.
+4. Add the generated Railway domain to the allowed domains for the Neshan web
+   key.
+
+`railway.toml` configures Railpack to build with `npm run build`, start with
+`npm run start`, and health-check the root route.
+
 ## Location workflow
 
 1. `locations:candidates` rebuilds a local evidence file from `../Classified/`.
