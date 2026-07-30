@@ -1,0 +1,9 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "status": "awaiting-location-enrichment",
+    "acceptedCount": 0,
+    "policy": "Only verified public-facing businesses, venues, and offices are mapped."
+  },
+  "features": []
+}
