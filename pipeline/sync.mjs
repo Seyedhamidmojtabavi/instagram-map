@@ -250,8 +250,10 @@ export async function runSync({ config = loadConfig(), log = console.log, fetchI
         log(`${error.message}. Continuing with Instagram evidence only.`);
         result = await locateProfile({ profile, primaryCategory: primaryCategoryOf(classification.categories), evidence, approval, neshan: null, cache, fetchImpl });
       }
-      // Keep a known-good pin when fresh evidence is merely weaker (for example a bio edit).
-      if (previous?.status === "located" && result.status === "review") {
+      // Keep a known-good pin when fresh evidence is merely weaker (for example a
+      // bio edit, or Neshan being unreachable). Pins derived from Instagram
+      // evidence are recomputed from that evidence instead.
+      if (previous?.status === "located" && result.status === "review" && !previous.method?.startsWith("instagram-")) {
         state.locations[follow.pk] = { ...previous, fingerprint: locateFingerprint };
         continue;
       }

@@ -222,8 +222,15 @@ export function distanceMeters([lng1, lat1], [lng2, lat2]) {
   return 6_371_000 * 2 * Math.asin(Math.sqrt(a));
 }
 
-/** City-wide tags ("Tehran, Iran") say nothing about where a venue is. */
+/**
+ * City-wide tags ("Tehran, Iran", "Walnut Creek, California") say nothing
+ * about where a venue is. Instagram gives venues a street address; cities and
+ * regions come back as "Place, Region" with no address.
+ */
 export function isCityLevelTag(cluster) {
+  if (!String(cluster.address ?? "").trim() && /^[^,،]{2,40}[,،]\s*[^,،]{2,40}(?:[,،]\s*[^,،]{2,40})?$/u.test(String(cluster.name).trim())) {
+    return true;
+  }
   const name = normalizeText(cluster.name);
   const words = name.split(" ").filter(Boolean);
   if (words.length > 3) return false;

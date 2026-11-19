@@ -138,6 +138,10 @@ test("post tags are clustered and city-wide tags ignored", () => {
   assert.equal(clusters[0].count, 2);
   assert.equal(isCityLevelTag({ name: "Tehran, Iran" }), true);
   assert.equal(isCityLevelTag({ name: "Iran Artists House" }), false);
+  assert.equal(isCityLevelTag({ name: "Walnut Creek, California", address: "" }), true);
+  assert.equal(isCityLevelTag({ name: "Seville, Spain" }), true);
+  assert.equal(isCityLevelTag({ name: "Cafe Lamiz, Tehran", address: "Valiasr St" }), false, "a venue with an address is kept");
+  assert.equal(isCityLevelTag({ name: "Pedram Couture", address: "" }), false);
 });
 
 test("people are never pinned, businesses with an address are", () => {
@@ -315,6 +319,21 @@ test("a stripped-down profile from Instagram is retried later, not stored", asyn
     await runSync({ config: testConfig(dataDir), log: () => {}, fetchImpl: fakeInstagram(world) });
     const next = JSON.parse(await readFile(join(dataDir, "state.json"), "utf8"));
     assert.equal(next.profiles["2"].username, "nan.bakery");
+  } finally {
+    await rm(dataDir, { recursive: true, force: true });
+  }
+});
+
+test("a coach who tags their home city is not pinned", async () => {
+  const dataDir = await mkdtemp(join(tmpdir(), "atlas-city-"));
+  try {
+    const coach = { pk: 7, username: "coach", full_name: "A Coach", biography: "Helping leaders communicate", category: "Coach", is_business: true };
+    const city = { name: "Walnut Creek, California", address: "", lat: 37.9, lng: -122.06 };
+    const world = { following: [coach], posts: { 7: [city, city, city, city, { ...city, name: "San Francisco, California" }] } };
+    await runSync({ config: testConfig(dataDir), log: () => {}, fetchImpl: fakeInstagram(world) });
+    const atlas = JSON.parse(await readFile(join(dataDir, "atlas.json"), "utf8"));
+    assert.equal(atlas.features.length, 0);
+    assert.equal(atlas.directory[0].username, "coach", "still listed in the directory");
   } finally {
     await rm(dataDir, { recursive: true, force: true });
   }
