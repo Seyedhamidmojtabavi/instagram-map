@@ -1,58 +1,49 @@
-import type { Metadata } from "next";
-import { Cormorant_Garamond, Vazirmatn } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Schibsted_Grotesk, Vazirmatn } from "next/font/google";
 import "@neshan-maps-platform/mapbox-gl/dist/NeshanMapboxGl.css";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-display",
+const latin = Schibsted_Grotesk({
+  variable: "--font-latin",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const vazirmatn = Vazirmatn({
-  variable: "--font-sans",
+const persian = Vazirmatn({
+  variable: "--font-persian",
   subsets: ["arabic", "latin"],
+  weight: ["400", "500", "700"],
 });
-
-const productionOrigin =
-  "https://following-atlas-iran-903.s-hamidreza-mojtabav.chatgpt.site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(productionOrigin),
-  title: "Following Atlas — Public places across Iran",
+  title: "Following Atlas: the places behind the pages you follow",
   description:
-    "A curated, filterable map of public businesses and venues discovered through 903 Instagram profiles.",
-  icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-  },
+    "Every Instagram page you follow, sorted into a searchable directory, with the cafés, shops and studios among them pinned on a map of Iran.",
+  icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
   openGraph: {
     title: "Following Atlas",
-    description: "A curated map of public places across Iran.",
+    description: "The places behind the pages you follow, on one map.",
     type: "website",
-    images: [{
-      url: "/og.png",
-      width: 1740,
-      height: 900,
-      alt: "Following Atlas — Public places across Iran",
-    }],
+    images: [{ url: "/og.png", width: 1740, height: 900, alt: "Following Atlas map of Tehran" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Following Atlas",
-    description: "A curated map of public places across Iran.",
+    description: "The places behind the pages you follow, on one map.",
     images: ["/og.png"],
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#1B2A5C",
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${cormorant.variable} ${vazirmatn.variable}`}>{children}</body>
+      <body className={`${latin.variable} ${persian.variable}`}>{children}</body>
     </html>
   );
 }
