@@ -162,7 +162,9 @@ export async function locateProfile({ profile, primaryCategory, evidence, approv
   ];
   return {
     status: "review",
-    reason: proposals.length ? "needs-human-review" : "no-match-found",
+    reason: evidence.businessPinRejected
+      ? `instagram-address-unreliable:${evidence.businessPinRejected}`
+      : proposals.length ? "needs-human-review" : "no-match-found",
     searchUnavailable: neshan ? !neshan.available : true,
     proposals,
   };

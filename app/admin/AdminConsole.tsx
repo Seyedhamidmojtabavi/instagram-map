@@ -203,6 +203,18 @@ export function AdminConsole() {
   );
 }
 
+function reasonText(reason: string) {
+  const problems: Record<string, string> = {
+    "shared-by-other-accounts": "Instagram puts several different businesses on this same point, so it is a city centre, not this venue.",
+    "city-centroid": "Instagram's pin for this address is a generic city point, not the venue.",
+    "outside-named-city": "Instagram's pin for this address is far from the city the address names.",
+    "outside-iran": "The address says Iran but Instagram's pin is outside Iran.",
+  };
+  if (reason.startsWith("instagram-address-unreliable:")) return problems[reason.split(":")[1]] ?? "Instagram's pin for this address is unreliable.";
+  if (reason === "no-match-found") return "No map source matched this page.";
+  return "";
+}
+
 function ReviewCard({
   item,
   onApprove,
@@ -218,6 +230,7 @@ function ReviewCard({
         <a href={`https://www.instagram.com/${item.username}/`} target="_blank" rel="noreferrer">@{item.username}</a>
         <span className="admin-muted">{item.categories.map((id) => categoryById.get(id)?.label ?? id).join(", ")}</span>
       </div>
+      {reasonText(item.reason) && <p className="admin-muted">{reasonText(item.reason)}</p>}
       {item.biography && <p className="review-bio" dir="auto">{item.biography}</p>}
       {item.proposals.length > 0 && (
         <ul className="proposals">

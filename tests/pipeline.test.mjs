@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import {
+  businessPinProblem,
   buildEvidence,
   clusterPostLocations,
   coordinatesFromMapUrl,
@@ -365,6 +366,34 @@ test("pages classified by rules are retried with Gemini on a later run", async (
     state = JSON.parse(await readFile(join(dataDir, "state.json"), "utf8"));
     assert.equal(state.classifications["1"].method, "gemini:gemini-2.5-flash");
     assert.deepEqual(state.classifications["2"].categories, ["Restaurants"]);
+  } finally {
+    await rm(dataDir, { recursive: true, force: true });
+  }
+});
+
+test("Instagram's bad business coordinates are rejected", () => {
+  assert.equal(businessPinProblem([51.4231, 35.6961], { addressText: "Gheytarieh, Tehran" }), "city-centroid");
+  assert.equal(businessPinProblem([-86.4271, 30.4898], { addressText: "Ziafeh mediteranean, Tehran, Iran" }), "outside-named-city");
+  assert.equal(businessPinProblem([-80.18162, 39.50126], { addressText: "No. 93, Shahnawaz St, Tehran" }), "outside-named-city");
+  assert.equal(businessPinProblem([51.45, 35.77], { addressText: "Shariati St", sharedPins: new Set(["51.4500,35.7700"]) }), "shared-by-other-accounts");
+  assert.equal(businessPinProblem([9.1487062, 45.4854821], { addressText: "Via Aldo Rossi 8, Milan, Italy" }), null);
+  assert.equal(businessPinProblem([51.4206, 35.7081], { addressText: "Iranshahr St, Tehran" }), null);
+});
+
+test("businesses sharing one Instagram pin go to review instead of the map", async () => {
+  const dataDir = await mkdtemp(join(tmpdir(), "atlas-centroid-"));
+  try {
+    const centroid = { address_street: "somewhere", city_name: "Tehran", latitude: 35.72, longitude: 51.44 };
+    const a = { ...bakery, pk: 21, username: "shop.a", full_name: "Shop A", ...centroid, address_street: "Tajrish" };
+    const b = { ...bakery, pk: 22, username: "shop.b", full_name: "Shop B", ...centroid, address_street: "Saadat Abad" };
+    await runSync({ config: testConfig(dataDir), log: () => {}, fetchImpl: fakeInstagram({ following: [a, b, cafe] }) });
+    const atlas = JSON.parse(await readFile(join(dataDir, "atlas.json"), "utf8"));
+    assert.deepEqual(atlas.features.map((f) => f.properties.username), ["rooftop.cafe"]);
+    const review = JSON.parse(await readFile(join(dataDir, "review.json"), "utf8"));
+    assert.deepEqual(review.items.map((item) => item.reason).sort(), [
+      "instagram-address-unreliable:shared-by-other-accounts",
+      "instagram-address-unreliable:shared-by-other-accounts",
+    ]);
   } finally {
     await rm(dataDir, { recursive: true, force: true });
   }

@@ -5,7 +5,7 @@ import { loadConfig } from "./config.mjs";
 import { acquireLock, loadState, paths, readJson, saveState, writeJson } from "./store.mjs";
 import { createInstagramClient, InstagramError } from "./instagram.mjs";
 import { classificationFingerprint, classifyProfiles } from "./classify.mjs";
-import { buildEvidence, fingerprint, primaryCategoryOf } from "./evidence.mjs";
+import { buildEvidence, fingerprint, isPlausibleCoordinate, pinKey, primaryCategoryOf } from "./evidence.mjs";
 import { createNeshanSearch, NeshanUnavailableError } from "./neshan.mjs";
 import { locateProfile } from "./geocode.mjs";
 import { buildAtlas } from "./publish.mjs";
@@ -216,12 +216,21 @@ export async function runSync({ config = loadConfig(), log = console.log, fetchI
       fetchImpl,
     });
     let searchNotice = null;
+    // Business pins that several accounts share are city centroids, not venues.
+    const pinOwners = new Map();
+    for (const follow of Object.values(state.following)) {
+      const business = state.profiles[follow.pk]?.business;
+      if (!business?.street || !isPlausibleCoordinate([business.lng, business.lat])) continue;
+      const key = pinKey([business.lng, business.lat]);
+      pinOwners.set(key, (pinOwners.get(key) ?? 0) + 1);
+    }
+    const sharedPins = new Set([...pinOwners].filter(([, owners]) => owners >= 2).map(([key]) => key));
     for (const follow of Object.values(state.following)) {
       const profile = state.profiles[follow.pk];
       const classification = state.classifications[follow.pk];
       if (!profile || !classification) continue;
       const approval = approvals.get(profile.username.toLowerCase());
-      const evidence = buildEvidence(profile, classification.categories);
+      const evidence = buildEvidence(profile, classification.categories, { sharedPins });
       const locateFingerprint = fingerprint([evidence.fingerprint, approval ?? null]);
       const previous = state.locations[follow.pk];
       if (previous?.fingerprint === locateFingerprint && !(previous.status === "review" && previous.searchUnavailable && neshan.available)) {
