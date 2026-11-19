@@ -175,10 +175,20 @@ export async function runSync({ config = loadConfig(), log = console.log, fetchI
     await saveState(dataDir, state);
 
     // ---- 2. Classify profiles that are new or whose name, bio, or category changed.
-    const toClassify = Object.values(state.following)
+    const changed = Object.values(state.following)
       .map((follow) => state.profiles[follow.pk])
       .filter(Boolean)
       .filter((profile) => state.classifications[profile.pk]?.fingerprint !== classificationFingerprint(profile));
+    // Pages that fell back to keyword rules (Gemini busy or over quota) get
+    // another try with Gemini, a few per run.
+    const changedPks = new Set(changed.map((profile) => profile.pk));
+    const retryWithGemini = config.classifier.apiKey
+      ? Object.values(state.following)
+          .map((follow) => state.profiles[follow.pk])
+          .filter((profile) => profile && !changedPks.has(profile.pk) && state.classifications[profile.pk]?.method === "rules")
+          .slice(0, config.classifier.batchSize * 2)
+      : [];
+    const toClassify = [...changed, ...retryWithGemini];
     if (toClassify.length) {
       log(`Classifying ${toClassify.length} profiles${config.classifier.apiKey ? " with Gemini" : " with keyword rules (no GEMINI_API_KEY)"}.`);
       const results = await classifyProfiles(toClassify, { ...config.classifier, fetchImpl, log });
