@@ -31,9 +31,14 @@ web.on("exit", (code, signal) => {
 for (const signal of ["SIGTERM", "SIGINT"]) {
   process.on(signal, () => {
     web.kill(signal);
-    setTimeout(() => process.exit(0), 5_000).unref();
+    // A sync cut off by a redeploy must not leave its lock behind.
+    rm(files.lock, { force: true }).finally(() => setTimeout(() => process.exit(0), 3_000).unref());
   });
 }
+
+// Railway runs one container per volume, so a lock that exists at boot belongs
+// to a process that is gone (for example a deploy replaced mid-sync).
+await rm(files.lock, { force: true });
 
 const hasCredentials = Boolean(config.instagram.authorization || config.instagram.sessionId);
 let running = false;
