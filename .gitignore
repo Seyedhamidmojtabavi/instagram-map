@@ -45,3 +45,6 @@ next-env.d.ts
 
 # local geocoding evidence and API response cache
 /data/*.json
+
+# pipeline state and published atlas (contains Instagram data)
+/data/runtime/

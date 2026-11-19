@@ -1,9 +1,7 @@
-import { AtlasMap } from "./AtlasMap";
+import { AtlasApp } from "./AtlasApp";
 
 export const dynamic = "force-dynamic";
 
 export default function Home() {
-  return (
-    <AtlasMap webKey={process.env.NEXT_PUBLIC_NESHAN_WEB_KEY ?? ""} />
-  );
+  return <AtlasApp webKey={process.env.NEXT_PUBLIC_NESHAN_WEB_KEY ?? ""} />;
 }

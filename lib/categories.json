@@ -1,0 +1,35 @@
+{
+  "families": [
+    { "id": "food", "label": "Food & drink", "labelFa": "خوراک و نوشیدنی", "color": "#C0353F" },
+    { "id": "shopping", "label": "Shopping", "labelFa": "خرید", "color": "#C98112" },
+    { "id": "services", "label": "Work & services", "labelFa": "کسب‌وکار و خدمات", "color": "#2F4FB0" },
+    { "id": "learning", "label": "Learning", "labelFa": "آموزش", "color": "#0F7F86" },
+    { "id": "wellbeing", "label": "Health & sport", "labelFa": "سلامت و ورزش", "color": "#3B8547" },
+    { "id": "travel", "label": "Travel & events", "labelFa": "سفر و رویداد", "color": "#2B7FB8" },
+    { "id": "culture", "label": "Culture & media", "labelFa": "فرهنگ و رسانه", "color": "#8A3C8E" },
+    { "id": "people", "label": "People & community", "labelFa": "افراد و جامعه", "color": "#5E6675" }
+  ],
+  "categories": [
+    { "id": "Restaurants", "label": "Restaurants", "family": "food", "publicPlace": true, "repeatedLocation": true },
+    { "id": "Cafes_and_Coffee_Shops", "label": "Cafés & coffee", "family": "food", "publicPlace": true, "repeatedLocation": true },
+    { "id": "Bakeries_Desserts_and_Sweets", "label": "Bakeries & sweets", "family": "food", "publicPlace": true, "repeatedLocation": true },
+    { "id": "Food_Products_Catering_and_Grocery", "label": "Grocery & catering", "family": "food", "publicPlace": true, "repeatedLocation": true },
+    { "id": "Fashion_Beauty_Jewelry_and_Accessories", "label": "Fashion, beauty & jewelry", "family": "shopping", "publicPlace": true, "repeatedLocation": true },
+    { "id": "Electronics_Automotive_and_Gadgets", "label": "Electronics & automotive", "family": "shopping", "publicPlace": true, "repeatedLocation": true },
+    { "id": "Home_Books_Gifts_and_Other_Retail", "label": "Home, books & gifts", "family": "shopping", "publicPlace": true, "repeatedLocation": true },
+    { "id": "Immigration_Legal_and_Finance", "label": "Legal, finance & immigration", "family": "services", "publicPlace": true, "repeatedLocation": false },
+    { "id": "Marketing_Design_and_Business_Services", "label": "Marketing & design", "family": "services", "publicPlace": true, "repeatedLocation": false },
+    { "id": "Technology_and_Software", "label": "Technology & software", "family": "services", "publicPlace": false, "repeatedLocation": false },
+    { "id": "Other_Businesses_and_Services", "label": "Other services", "family": "services", "publicPlace": true, "repeatedLocation": false },
+    { "id": "Education_and_Language", "label": "Education & languages", "family": "learning", "publicPlace": true, "repeatedLocation": true },
+    { "id": "Health_Medical_and_Wellness", "label": "Health & wellness", "family": "wellbeing", "publicPlace": true, "repeatedLocation": true },
+    { "id": "Sports_and_Fitness", "label": "Sports & fitness", "family": "wellbeing", "publicPlace": true, "repeatedLocation": true },
+    { "id": "Travel_Hotels_and_Events", "label": "Travel, hotels & events", "family": "travel", "publicPlace": true, "repeatedLocation": true },
+    { "id": "Arts_Music_and_Entertainment", "label": "Arts, music & entertainment", "family": "culture", "publicPlace": false, "repeatedLocation": false },
+    { "id": "Media_News_and_Publishing", "label": "Media & publishing", "family": "culture", "publicPlace": false, "repeatedLocation": false },
+    { "id": "Creators_Public_Figures_and_Personal_Brands", "label": "Creators & public figures", "family": "people", "publicPlace": false, "repeatedLocation": false },
+    { "id": "Community_Nonprofit_and_Government", "label": "Community & nonprofit", "family": "people", "publicPlace": true, "repeatedLocation": false },
+    { "id": "Personal_and_Noncommercial", "label": "Personal", "family": "people", "publicPlace": false, "repeatedLocation": false, "hiddenFromDirectory": true },
+    { "id": "Unclear", "label": "Unclassified", "family": "people", "publicPlace": false, "repeatedLocation": false }
+  ]
+}
