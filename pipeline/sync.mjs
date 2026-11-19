@@ -12,6 +12,7 @@ import { buildAtlas } from "./publish.mjs";
 
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const DAY = 24 * 60 * 60 * 1000;
+export const REMOVE_AFTER_MISSED_RUNS = 3;
 
 function hash(value) {
   return createHash("sha256").update(value).digest("hex").slice(0, 16);
@@ -106,24 +107,30 @@ export async function runSync({ config = loadConfig(), log = console.log, fetchI
           `Instagram returned ${following.length} follows (was ${previousCount}). Refusing to drop that many at once.`,
         );
       }
+      // An account missing from one read may just be Instagram's unstable
+      // paging. Drop a page only after it is missing from several runs in a row.
       const next = {};
       const nowIso = now().toISOString();
       for (const user of following) {
         const previous = state.following[user.pk];
         if (!previous) stats.added += 1;
-        next[user.pk] = { ...user, firstSeenAt: previous?.firstSeenAt ?? nowIso };
+        next[user.pk] = { ...user, firstSeenAt: previous?.firstSeenAt ?? nowIso, missedRuns: 0 };
       }
-      for (const pk of Object.keys(state.following)) {
-        if (!next[pk]) {
-          stats.removed += 1;
-          delete state.profiles[pk];
-          delete state.classifications[pk];
-          delete state.locations[pk];
+      for (const [pk, previous] of Object.entries(state.following)) {
+        if (next[pk]) continue;
+        const missedRuns = (previous.missedRuns ?? 0) + 1;
+        if (missedRuns < REMOVE_AFTER_MISSED_RUNS) {
+          next[pk] = { ...previous, missedRuns };
+          continue;
         }
+        stats.removed += 1;
+        delete state.profiles[pk];
+        delete state.classifications[pk];
+        delete state.locations[pk];
       }
       state.following = next;
-      stats.following = following.length;
-      log(`Following ${following.length} accounts (${stats.added} new, ${stats.removed} unfollowed).`);
+      stats.following = Object.keys(next).length;
+      log(`Following ${Object.keys(next).length} accounts (${stats.added} new, ${stats.removed} unfollowed).`);
 
       const queue = profileQueue(state, {
         budget: config.instagram.profileBudget,
@@ -131,7 +138,15 @@ export async function runSync({ config = loadConfig(), log = console.log, fetchI
         now: startedAt.getTime(),
       });
       for (const [index, follow] of queue.entries()) {
-        const profile = await ig.userInfo(follow.pk);
+        // Instagram occasionally answers with a stripped-down profile (no
+        // username or name). Retry once, then leave it for the next run.
+        let profile = await ig.userInfo(follow.pk);
+        if (!profile.username) profile = await ig.userInfo(follow.pk);
+        if (!profile.username) {
+          stats.incompleteProfiles = (stats.incompleteProfiles ?? 0) + 1;
+          log(`Instagram returned an incomplete profile for @${follow.username}; retrying next run.`);
+          continue;
+        }
         profile.postLocations = config.instagram.fetchPostLocations && needsPostLocations(profile)
           ? await ig.postLocations(follow.pk)
           : state.profiles[follow.pk]?.postLocations ?? [];

@@ -54,6 +54,7 @@ function fakeInstagram(world) {
       return json({ status: "ok", users: users.map((u) => ({ pk: u.pk, username: u.username, full_name: u.full_name, is_private: u.is_private ?? false })), next_max_id: next });
     }
     const info = url.pathname.match(/^\/api\/v1\/users\/(\d+)\/info\/$/);
+    if (info && world.partial?.includes(Number(info[1]))) return json({ status: "ok", user: { pk: Number(info[1]), biography: "" } });
     if (info) {
       const user = world.following.find((u) => String(u.pk) === info[1]);
       return user ? json({ status: "ok", user }) : json({ status: "fail", message: "User not found" }, 404);
@@ -228,12 +229,28 @@ test("a full sync lists followed pages, pins places, and hides people", async ()
     assert.equal(atlas.stats.hidden, 1);
     assert.doesNotMatch(JSON.stringify(atlas), /my\.friend/);
 
-    // Unfollowing removes the page on the next run; a new follow appears.
+    // A new follow appears on the next run. An unfollowed page survives a
+    // couple of misses (Instagram's paging drops accounts at random), then goes.
     world.following = [cafe, bakery, artist, shop, { ...bakery, pk: 6, username: "new.place", full_name: "New Place" }];
-    await runSync({ config: testConfig(dataDir), log: () => {}, fetchImpl: fakeInstagram(world) });
-    const next = JSON.parse(await readFile(join(dataDir, "atlas.json"), "utf8"));
+    const sync = () => runSync({ config: testConfig(dataDir), log: () => {}, fetchImpl: fakeInstagram(world) });
+    const readAtlas = async () => JSON.parse(await readFile(join(dataDir, "atlas.json"), "utf8"));
+    await sync();
+    let next = await readAtlas();
     assert.ok(next.directory.some((entry) => entry.username === "new.place"));
-    assert.equal(next.stats.following, 5);
+    assert.equal(next.stats.following, 6, "the missing friend is kept for now");
+    await sync();
+    await sync();
+    next = await readAtlas();
+    assert.equal(next.stats.following, 5, "removed after three missed runs");
+
+    // A page missed once and then seen again keeps its data.
+    world.following = [cafe, artist, shop, { ...bakery, pk: 6, username: "new.place", full_name: "New Place" }];
+    await sync();
+    world.following = [cafe, bakery, artist, shop, { ...bakery, pk: 6, username: "new.place", full_name: "New Place" }];
+    await sync();
+    const state = JSON.parse(await readFile(join(dataDir, "state.json"), "utf8"));
+    assert.equal(state.following["2"].missedRuns, 0);
+    assert.equal(state.profiles["2"].username, "nan.bakery");
   } finally {
     await rm(dataDir, { recursive: true, force: true });
   }
@@ -276,6 +293,28 @@ test("admin approvals override the geocoder, including hiding a page", async () 
     const pins = Object.fromEntries(atlas.features.map((f) => [f.properties.username, f]));
     assert.deepEqual(pins["nan.bakery"].geometry.coordinates, [51.5, 35.8]);
     assert.equal(pins["rooftop.cafe"], undefined);
+  } finally {
+    await rm(dataDir, { recursive: true, force: true });
+  }
+});
+
+test("a stripped-down profile from Instagram is retried later, not stored", async () => {
+  const dataDir = await mkdtemp(join(tmpdir(), "atlas-partial-"));
+  try {
+    const world = { following: [cafe, bakery], partial: [2] };
+    const result = await runSync({ config: testConfig(dataDir), log: () => {}, fetchImpl: fakeInstagram(world) });
+    assert.equal(result.ok, true);
+    assert.equal(result.stats.incompleteProfiles, 1);
+    const state = JSON.parse(await readFile(join(dataDir, "state.json"), "utf8"));
+    assert.equal(state.profiles["2"], undefined);
+    const atlas = JSON.parse(await readFile(join(dataDir, "atlas.json"), "utf8"));
+    const pending = atlas.directory.find((entry) => entry.username === "nan.bakery");
+    assert.equal(pending.pending, true, "still listed, marked as being processed");
+
+    world.partial = [];
+    await runSync({ config: testConfig(dataDir), log: () => {}, fetchImpl: fakeInstagram(world) });
+    const next = JSON.parse(await readFile(join(dataDir, "state.json"), "utf8"));
+    assert.equal(next.profiles["2"].username, "nan.bakery");
   } finally {
     await rm(dataDir, { recursive: true, force: true });
   }

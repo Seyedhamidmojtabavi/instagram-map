@@ -88,6 +88,7 @@ ${CATEGORY_IDS.map((id) => `- ${id}: ${descriptions[id]}`).join("\n")}
 
 Rules:
 - Put the category that best describes what the account is first.
+- Most accounts need exactly one category. Add a second or third only when the bio or Instagram category shows the account clearly also works in that field; a famous person who talks about money is not a finance business.
 - A business that is also run by a known person gets both the business category and Creators_Public_Figures_and_Personal_Brands only if the person is the main subject.
 - Use Personal_and_Noncommercial only for private individuals with no public, professional, or creative role. Never guess that a business is personal.
 - Use Unclear only when the name, bio, and category give no signal.

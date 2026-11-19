@@ -74,9 +74,14 @@ Each run (`pipeline/sync.mjs`):
    `npm run start`, which runs `server/boot.mjs`: it starts the web server and
    schedules the first sync 20 seconds after boot.
 
-With about 900 followed pages and the default budget, the first full pass
-takes roughly 12 hourly runs. Pages appear in the directory immediately and
+With about 1,250 followed pages and the default budget, the first full pass
+takes roughly 16 hourly runs. Pages appear in the directory immediately and
 gain their category and pin as their profile is read.
+
+Instagram's paged following list is not stable: two back-to-back reads of
+about 1,250 follows differ by roughly ten accounts. Each run therefore reads
+the list twice and merges the results, and a page is only removed after it
+has been missing for three runs in a row (about three hours).
 
 ### When the Instagram token expires
 

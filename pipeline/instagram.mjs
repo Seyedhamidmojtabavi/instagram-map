@@ -179,8 +179,20 @@ export function createInstagramClient({
       return { pk: String(match.pk), username: match.username, isPrivate: Boolean(match.is_private) };
     },
 
-    /** Returns the complete following list, or throws. Never returns a partial list. */
-    async following(pk) {
+    /**
+     * Returns the following list, or throws. Instagram's paging is not stable:
+     * two back-to-back reads of ~1,250 follows differ by about ten accounts.
+     * Reading it `passes` times and merging makes a missed account unlikely.
+     */
+    async following(pk, { passes = 2 } = {}) {
+      const users = new Map();
+      for (let pass = 0; pass < passes; pass += 1) {
+        for (const user of await this.followingPass(pk)) users.set(user.pk, user);
+      }
+      return [...users.values()];
+    },
+
+    async followingPass(pk) {
       const rankToken = `${pk}_${randomUUID()}`;
       const users = new Map();
       let maxId = null;
