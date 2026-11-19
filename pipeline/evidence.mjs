@@ -238,12 +238,39 @@ export function isCityLevelTag(cluster) {
   return words.every((word) => cityWords.has(word));
 }
 
+/** Rounds a coordinate so pins on the same spot compare equal. */
+export function pinKey([lng, lat]) {
+  return `${Number(lng).toFixed(4)},${Number(lat).toFixed(4)}`;
+}
+
+// Generic points Instagram's geocoder returns for "Tehran" instead of a street.
+const knownCentroids = [
+  [51.4231, 35.6961],
+  [51.41503, 35.68877],
+  [51.389, 35.6892],
+];
+
+/**
+ * Instagram geocodes business addresses itself and does it badly in Iran: many
+ * Tehran businesses share one city-centre point, and some land on another
+ * continent. Returns why a business pin cannot be trusted, or null.
+ */
+export function businessPinProblem(pin, { addressText = "", sharedPins = new Set() } = {}) {
+  if (sharedPins.has(pinKey(pin))) return "shared-by-other-accounts";
+  if (knownCentroids.some((centroid) => distanceMeters(centroid, pin) < 300)) return "city-centroid";
+  if (Object.values(cityCenters).some((center) => distanceMeters(center, pin) < 150)) return "city-centroid";
+  const city = inferCity(addressText);
+  if (city && distanceMeters(cityCenters[city], pin) > 60_000) return "outside-named-city";
+  if (/(?:^|[^\p{L}])(?:iran|ایران)(?:$|[^\p{L}])/iu.test(addressText) && !isInIran(pin)) return "outside-iran";
+  return null;
+}
+
 /**
  * Everything the geocoder needs about one profile, plus the privacy decision.
  * `eligible` is false for people, closed businesses, and accounts without
  * public-place evidence. Those accounts are never pinned.
  */
-export function buildEvidence(profile, categories) {
+export function buildEvidence(profile, categories, { sharedPins = new Set() } = {}) {
   const categorySet = new Set(categories);
   const urls = [...(profile.externalUrls ?? []), ...urlsInText(profile.biography)];
   const mapLink = urls.find(isAllowedPublicMapUrl) ?? null;
@@ -251,8 +278,15 @@ export function buildEvidence(profile, categories) {
   const business = profile.business ?? {};
   const businessCoordinates = [Number(business.lng), Number(business.lat)];
   const hasBusinessAddress = Boolean(business.street);
-  const businessPin =
+  const rawBusinessPin =
     hasBusinessAddress && isPlausibleCoordinate(businessCoordinates) ? businessCoordinates : null;
+  const businessPinRejected = rawBusinessPin
+    ? businessPinProblem(rawBusinessPin, {
+        addressText: `${business.street} ${business.city} ${profile.biography ?? ""}`,
+        sharedPins,
+      })
+    : null;
+  const businessPin = businessPinRejected ? null : rawBusinessPin;
   const tags = clusterPostLocations(profile.postLocations ?? []).filter((cluster) => !isCityLevelTag(cluster));
 
   const hasPublicPlaceCategory = categories.some((id) => categoryById.get(id)?.publicPlace);
@@ -291,6 +325,7 @@ export function buildEvidence(profile, categories) {
     reason,
     mapLink,
     businessPin,
+    businessPinRejected,
     businessAddress: [business.street, business.city].filter(Boolean).join("، "),
     phone: business.phone ?? "",
     addressLines,
