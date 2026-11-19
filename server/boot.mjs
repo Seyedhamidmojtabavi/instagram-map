@@ -76,9 +76,16 @@ if (!hasCredentials) {
   await writeStatus();
 } else {
   log(`Syncing every ${config.schedule.intervalMinutes} minutes. Data lives in ${config.dataDir}.`);
-  nextRunAt = new Date(Date.now() + 20_000).toISOString();
+  // A redeploy should not trigger an extra Instagram sync: keep the existing
+  // schedule when the last run finished less than one interval ago.
+  const previous = await readJson(files.status, {});
+  const lastFinished = Date.parse(previous.lastResult?.finishedAt ?? "");
+  const due = Number.isFinite(lastFinished)
+    ? lastFinished + config.schedule.intervalMinutes * 60_000
+    : Date.now();
+  nextRunAt = new Date(Math.max(due, Date.now() + 20_000)).toISOString();
+  log(`Next sync at ${nextRunAt}.`);
   await writeStatus();
-  setTimeout(() => syncNow("boot"), 20_000);
   setInterval(() => {
     if (!running && nextRunAt && Date.parse(nextRunAt) <= Date.now()) syncNow("schedule");
   }, 30_000);
