@@ -398,3 +398,28 @@ test("businesses sharing one Instagram pin go to review instead of the map", asy
     await rm(dataDir, { recursive: true, force: true });
   }
 });
+
+test("an approval republishes from stored data without calling Instagram", async () => {
+  const dataDir = await mkdtemp(join(tmpdir(), "atlas-publish-"));
+  try {
+    await runSync({ config: testConfig(dataDir), log: () => {}, fetchImpl: fakeInstagram({ following: [cafe, bakery, artist] }) });
+    await writeFile(join(dataDir, "approvals.json"), JSON.stringify({ approvals: [
+      { username: "painter", coordinates: [51.42, 35.70] },
+    ] }));
+    let calls = 0;
+    const offline = async () => {
+      calls += 1;
+      throw new Error("no network in publish mode");
+    };
+    const result = await runSync({ config: testConfig(dataDir), log: () => {}, fetchImpl: offline, mode: "publish" });
+    assert.equal(result.ok, true);
+    assert.equal(calls, 0);
+    const atlas = JSON.parse(await readFile(join(dataDir, "atlas.json"), "utf8"));
+    const painter = atlas.features.find((f) => f.properties.username === "painter");
+    assert.deepEqual(painter.geometry.coordinates, [51.42, 35.7]);
+    const state = JSON.parse(await readFile(join(dataDir, "state.json"), "utf8"));
+    assert.equal(state.runs.length, 1, "a republish is not recorded as an Instagram sync");
+  } finally {
+    await rm(dataDir, { recursive: true, force: true });
+  }
+});

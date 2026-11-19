@@ -12,6 +12,7 @@ export function paths(dataDir) {
     review: join(dataDir, "review.json"),
     lock: join(dataDir, "sync.lock"),
     request: join(dataDir, "sync-request.json"),
+    publishRequest: join(dataDir, "publish-request.json"),
     session: join(dataDir, "ig-session.json"),
     cache: join(dataDir, "geocode-cache.json"),
   };

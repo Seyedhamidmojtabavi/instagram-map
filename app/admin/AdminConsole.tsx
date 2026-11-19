@@ -24,7 +24,7 @@ type Run = {
 };
 type AdminData = {
   review: { count: number; items: ReviewItem[] };
-  status: { scheduler?: string; running?: boolean; nextRunAt?: string | null; intervalMinutes?: number } | null;
+  status: { scheduler?: string; running?: boolean; publishing?: boolean; nextRunAt?: string | null; intervalMinutes?: number } | null;
   owner: { username: string } | null;
   target: { username: string } | null;
   backoffUntil: string | null;
@@ -44,6 +44,8 @@ export function AdminConsole() {
   const [data, setData] = useState<AdminData | null>(null);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  // Pages decided in this session stay hidden even before the republish lands.
+  const [resolved, setResolved] = useState<Set<string>>(() => new Set());
 
   useEffect(() => {
     try {
@@ -105,12 +107,12 @@ export function AdminConsole() {
   async function approve(item: ReviewItem, payload: Record<string, unknown>, done: string) {
     try {
       await call("/api/admin/approve", { method: "POST", body: JSON.stringify({ username: item.username, ...payload }) });
-      setNotice(`${done} The map updates after the next sync, which starts now.`);
-      setData((current) =>
-        current
-          ? { ...current, review: { count: current.review.count - 1, items: current.review.items.filter((entry) => entry.pk !== item.pk) } }
-          : current,
+      setNotice(
+        data?.status?.running && !data.status.publishing
+          ? `${done} It goes on the map as soon as the sync that is running now finishes.`
+          : `${done} It will be on the map within a few seconds.`,
       );
+      setResolved((current) => new Set(current).add(item.pk));
     } catch (reason) {
       setError((reason as Error).message);
     }
@@ -139,6 +141,7 @@ export function AdminConsole() {
   }
 
   const lastRun = data?.runs[0];
+  const openItems = (data?.review.items ?? []).filter((item) => !resolved.has(item.pk));
   return (
     <main className="admin">
       <header className="admin-head">
@@ -152,8 +155,8 @@ export function AdminConsole() {
         </div>
         <div className="admin-actions">
           <Link href="/" className="button">View the map</Link>
-          <button type="button" className="button primary" onClick={syncNow} disabled={data?.status?.running}>
-            {data?.status?.running ? "Syncing…" : "Sync now"}
+          <button type="button" className="button primary" onClick={syncNow} disabled={Boolean(data?.status?.running && !data.status.publishing)}>
+            {data?.status?.running && !data.status.publishing ? "Syncing…" : "Sync now"}
           </button>
         </div>
       </header>
@@ -192,12 +195,12 @@ export function AdminConsole() {
       </section>
 
       <section className="admin-section">
-        <h2>Needs a location ({data?.review.count ?? 0})</h2>
+        <h2>Needs a location ({openItems.length})</h2>
         <p className="admin-muted">These pages look like public places, but no source was confident enough to pin them. Pick a match, paste a map link or coordinates, or mark the page as not a place.</p>
         <ul className="review-list">
-          {data?.review.items.map((item) => <ReviewCard key={item.pk} item={item} onApprove={approve} />)}
+          {openItems.map((item) => <ReviewCard key={item.pk} item={item} onApprove={approve} />)}
         </ul>
-        {data && data.review.items.length === 0 && <p>Nothing to review.</p>}
+        {data && openItems.length === 0 && <p>Nothing to review.</p>}
       </section>
     </main>
   );
