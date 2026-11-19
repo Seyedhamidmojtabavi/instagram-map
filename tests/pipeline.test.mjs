@@ -184,7 +184,7 @@ test("Gemini answers are validated and fall back to rules", async () => {
     }), { status: 200 });
   const results = await classifyProfiles(
     [profile({ pk: "1", username: "a" }), profile({ pk: "2", username: "b", category: "Gym/Physical Fitness Center" })],
-    { apiKey: "test", models: ["gemini-2.5-flash"], fetchImpl },
+    { apiKey: "test", models: ["gemini-2.5-flash"], batchDelayMs: 0, fetchImpl },
   );
   assert.deepEqual(results.get("1"), { categories: ["Restaurants"], method: "gemini:gemini-2.5-flash" });
   assert.equal(results.get("2").method, "rules");
@@ -334,6 +334,37 @@ test("a coach who tags their home city is not pinned", async () => {
     const atlas = JSON.parse(await readFile(join(dataDir, "atlas.json"), "utf8"));
     assert.equal(atlas.features.length, 0);
     assert.equal(atlas.directory[0].username, "coach", "still listed in the directory");
+  } finally {
+    await rm(dataDir, { recursive: true, force: true });
+  }
+});
+
+test("pages classified by rules are retried with Gemini on a later run", async () => {
+  const dataDir = await mkdtemp(join(tmpdir(), "atlas-retry-"));
+  try {
+    const instagram = fakeInstagram({ following: [cafe, bakery] });
+    let geminiUp = false;
+    const fetchImpl = async (input, init) => {
+      if (!String(input).includes("generativelanguage")) return instagram(input, init);
+      if (!geminiUp) {
+        return new Response(JSON.stringify({ error: { message: "quota", details: [{ retryDelay: "0s" }] } }), { status: 429 });
+      }
+      const asked = JSON.parse(JSON.parse(init.body).contents[0].parts[0].text.replace(/^[^\[]*/, ""));
+      return new Response(JSON.stringify({ candidates: [{ finishReason: "STOP", content: { parts: [{ text: JSON.stringify({
+        results: asked.map((item) => ({ username: item.username, categories: ["Restaurants"] })),
+      }) }] } }] }), { status: 200 });
+    };
+    const config = testConfig(dataDir);
+    config.classifier = { ...config.classifier, apiKey: "test", batchDelayMs: 0 };
+    await runSync({ config, log: () => {}, fetchImpl });
+    let state = JSON.parse(await readFile(join(dataDir, "state.json"), "utf8"));
+    assert.equal(state.classifications["1"].method, "rules");
+
+    geminiUp = true;
+    await runSync({ config, log: () => {}, fetchImpl });
+    state = JSON.parse(await readFile(join(dataDir, "state.json"), "utf8"));
+    assert.equal(state.classifications["1"].method, "gemini:gemini-2.5-flash");
+    assert.deepEqual(state.classifications["2"].categories, ["Restaurants"]);
   } finally {
     await rm(dataDir, { recursive: true, force: true });
   }

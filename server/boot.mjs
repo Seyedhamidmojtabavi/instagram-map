@@ -43,6 +43,7 @@ await rm(files.lock, { force: true });
 const hasCredentials = Boolean(config.instagram.authorization || config.instagram.sessionId);
 let running = false;
 let nextRunAt = null;
+let lastStartedAt = 0;
 
 async function writeStatus(extra = {}) {
   const previous = await readJson(files.status, {});
@@ -60,7 +61,8 @@ async function writeStatus(extra = {}) {
 async function syncNow(trigger) {
   if (running) return;
   running = true;
-  await writeStatus({ lastTrigger: trigger, startedAt: new Date().toISOString() });
+  lastStartedAt = Date.now();
+  await writeStatus({ lastTrigger: trigger, startedAt: new Date(lastStartedAt).toISOString() });
   let result;
   try {
     result = await runSync({ config, log });
@@ -99,6 +101,9 @@ if (!hasCredentials) {
     const request = await readJson(files.request, null).catch(() => null);
     if (!request) return;
     await rm(files.request, { force: true });
+    // A request made before the last run started was already served by it
+    // (a duplicated POST would otherwise queue a second full sync).
+    if (Date.parse(request.requestedAt ?? "") <= lastStartedAt) return;
     syncNow("manual");
   }, 10_000);
 }

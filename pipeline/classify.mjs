@@ -138,12 +138,15 @@ async function callGemini({ apiKey, model, profiles, fetchImpl }) {
         temperature: 0,
       },
     }),
-    signal: AbortSignal.timeout(120_000),
+    signal: AbortSignal.timeout(60_000),
   });
   const body = await response.json().catch(() => null);
   if (!response.ok) {
     const error = new Error(body?.error?.message ?? `Gemini returned HTTP ${response.status}.`);
     error.status = response.status;
+    // Rate-limit errors say how long to wait ("retryDelay": "36s").
+    const retryDelay = (body?.error?.details ?? []).find((detail) => detail.retryDelay)?.retryDelay;
+    if (retryDelay) error.retryAfterMs = Math.min(parseFloat(retryDelay) * 1000, 90_000);
     throw error;
   }
   const candidate = body?.candidates?.[0];
@@ -158,17 +161,20 @@ async function callGemini({ apiKey, model, profiles, fetchImpl }) {
  * Classifies profiles in batches. Each profile always gets a result: Gemini when
  * it is configured and answering, keyword rules otherwise.
  */
-export async function classifyProfiles(profiles, { apiKey, models = ["gemini-2.5-flash"], batchSize = 25, fetchImpl = fetch, log = () => {} } = {}) {
+export async function classifyProfiles(profiles, { apiKey, models = ["gemini-2.5-flash"], batchSize = 25, batchDelayMs = 13_000, fetchImpl = fetch, log = () => {} } = {}) {
   const results = new Map();
   const validIds = new Set(CATEGORY_IDS);
   const demoted = new Set();
   for (let start = 0; start < profiles.length; start += batchSize) {
     const batch = profiles.slice(start, start + batchSize);
+    // The free Gemini tier allows only a few requests per minute.
+    const geminiAvailable = apiKey && models.some((model) => !demoted.has(model));
+    if (start > 0 && geminiAvailable) await sleep(batchDelayMs);
     let answers = null;
     let usedModel = null;
-    if (apiKey) {
+    if (geminiAvailable) {
       outer: for (const model of models) {
-        if (demoted.has(model) && model !== models.at(-1)) continue;
+        if (demoted.has(model)) continue;
         for (let attempt = 0; attempt < 3; attempt += 1) {
           try {
             answers = await callGemini({ apiKey, model, profiles: batch, fetchImpl });
@@ -182,7 +188,7 @@ export async function classifyProfiles(profiles, { apiKey, models = ["gemini-2.5
               demoted.add(model);
               break;
             }
-            await sleep(4_000 * 2 ** attempt);
+            await sleep(error.retryAfterMs ?? 4_000 * 2 ** attempt);
           }
         }
       }

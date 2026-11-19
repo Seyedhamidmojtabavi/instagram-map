@@ -40,13 +40,9 @@ export function loadConfig() {
     },
     classifier: {
       apiKey: process.env.GEMINI_API_KEY?.trim() || "",
-      // Tried in order; a model that is overloaded falls through to the next.
-      models: [
-        ...new Set([
-          ...(process.env.GEMINI_MODEL || "gemini-2.5-flash").split(",").map((m) => m.trim()).filter(Boolean),
-          "gemini-flash-latest",
-        ]),
-      ],
+      // Tried in order; a model that keeps failing is skipped for the rest of
+      // the run, and pages fall back to keyword rules until the next run.
+      models: (process.env.GEMINI_MODEL || "gemini-2.5-flash").split(",").map((m) => m.trim()).filter(Boolean),
       batchSize: number("CLASSIFIER_BATCH_SIZE", 25),
     },
     geocoder: {
