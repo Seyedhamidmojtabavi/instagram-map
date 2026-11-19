@@ -57,7 +57,13 @@ function needsPostLocations(profile) {
   return profile.isBusiness || profile.isProfessional || Boolean(profile.category);
 }
 
-export async function runSync({ config = loadConfig(), log = console.log, fetchImpl = fetch, now = () => new Date() } = {}) {
+/**
+ * mode "full": Instagram, classification, location, publish.
+ * mode "publish": re-applies approvals and location rules to stored profiles
+ * and republishes, with no Instagram or Gemini calls. Used after an approval.
+ */
+export async function runSync({ config = loadConfig(), log = console.log, fetchImpl = fetch, now = () => new Date(), mode = "full" } = {}) {
+  const full = mode === "full";
   const { dataDir } = config;
   const release = await acquireLock(dataDir);
   if (!release) {
@@ -73,135 +79,137 @@ export async function runSync({ config = loadConfig(), log = console.log, fetchI
     const inBackoff = Boolean(state.backoffUntil && Date.parse(state.backoffUntil) > startedAt.getTime());
     if (inBackoff) log(`Instagram asked us to slow down; skipping Instagram until ${state.backoffUntil}.`);
 
-    // ---- 1. Instagram: who does the account follow, and what do their profiles say?
-    const sessionPath = paths(dataDir).session;
-    const envAuthorization = config.instagram.authorization;
-    const stored = await readJson(sessionPath, null);
-    const source = hash(envAuthorization || config.instagram.sessionId || "none");
-    const authorization = stored?.source === source && stored.authorization ? stored.authorization : envAuthorization;
-    const ig = createInstagramClient({
-      authorization,
-      sessionId: config.instagram.sessionId,
-      baseUrl: config.instagram.baseUrl,
-      requestDelayMs: config.instagram.requestDelayMs,
-      fetchImpl,
-      onAuthorizationRefresh: (value) =>
-        writeJson(sessionPath, { source, authorization: value, at: now().toISOString() }, { mode: 0o600 }),
-    });
-
     let instagramError = null;
-    try {
-      if (inBackoff) throw new InstagramError("Waiting for the Instagram rate limit to reset.", { kind: "backoff" });
-      const owner = await ig.currentUser();
-      state.owner = owner;
-      const target = config.instagram.targetUsername && config.instagram.targetUsername.toLowerCase() !== owner.username.toLowerCase()
-        ? await ig.lookupUser(config.instagram.targetUsername)
-        : { ...owner, isPrivate: false };
-      state.target = { pk: target.pk, username: target.username };
-      log(`Signed in as @${owner.username}; reading who @${target.username} follows.`);
-
-      const following = await ig.following(target.pk);
-      const previousCount = Object.keys(state.following).length;
-      if (previousCount >= 20 && following.length < previousCount * 0.4) {
-        throw new InstagramError(
-          `Instagram returned ${following.length} follows (was ${previousCount}). Refusing to drop that many at once.`,
-        );
-      }
-      // An account missing from one read may just be Instagram's unstable
-      // paging. Drop a page only after it is missing from several runs in a row.
-      const next = {};
-      const nowIso = now().toISOString();
-      for (const user of following) {
-        const previous = state.following[user.pk];
-        if (!previous) stats.added += 1;
-        next[user.pk] = { ...user, firstSeenAt: previous?.firstSeenAt ?? nowIso, missedRuns: 0 };
-      }
-      for (const [pk, previous] of Object.entries(state.following)) {
-        if (next[pk]) continue;
-        const missedRuns = (previous.missedRuns ?? 0) + 1;
-        if (missedRuns < REMOVE_AFTER_MISSED_RUNS) {
-          next[pk] = { ...previous, missedRuns };
-          continue;
-        }
-        stats.removed += 1;
-        delete state.profiles[pk];
-        delete state.classifications[pk];
-        delete state.locations[pk];
-      }
-      state.following = next;
-      stats.following = Object.keys(next).length;
-      log(`Following ${Object.keys(next).length} accounts (${stats.added} new, ${stats.removed} unfollowed).`);
-
-      const queue = profileQueue(state, {
-        budget: config.instagram.profileBudget,
-        maxAgeDays: config.instagram.profileMaxAgeDays,
-        now: startedAt.getTime(),
+    if (full) {
+      // ---- 1. Instagram: who does the account follow, and what do their profiles say?
+      const sessionPath = paths(dataDir).session;
+      const envAuthorization = config.instagram.authorization;
+      const stored = await readJson(sessionPath, null);
+      const source = hash(envAuthorization || config.instagram.sessionId || "none");
+      const authorization = stored?.source === source && stored.authorization ? stored.authorization : envAuthorization;
+      const ig = createInstagramClient({
+        authorization,
+        sessionId: config.instagram.sessionId,
+        baseUrl: config.instagram.baseUrl,
+        requestDelayMs: config.instagram.requestDelayMs,
+        fetchImpl,
+        onAuthorizationRefresh: (value) =>
+          writeJson(sessionPath, { source, authorization: value, at: now().toISOString() }, { mode: 0o600 }),
       });
-      for (const [index, follow] of queue.entries()) {
-        // Instagram occasionally answers with a stripped-down profile (no
-        // username or name). Retry once, then leave it for the next run.
-        let profile = await ig.userInfo(follow.pk);
-        if (!profile.username) profile = await ig.userInfo(follow.pk);
-        if (!profile.username) {
-          stats.incompleteProfiles = (stats.incompleteProfiles ?? 0) + 1;
-          log(`Instagram returned an incomplete profile for @${follow.username}; retrying next run.`);
-          continue;
-        }
-        profile.postLocations = config.instagram.fetchPostLocations && needsPostLocations(profile)
-          ? await ig.postLocations(follow.pk)
-          : state.profiles[follow.pk]?.postLocations ?? [];
-        profile.fetchedAt = now().toISOString();
-        state.profiles[follow.pk] = profile;
-        stats.profilesFetched += 1;
-        if ((index + 1) % 10 === 0) {
-          await saveState(dataDir, state);
-          log(`Fetched ${index + 1}/${queue.length} profiles.`);
-        }
-      }
-      state.backoffUntil = null;
-      state.backoffMinutes = 0;
-    } catch (error) {
-      if (!(error instanceof InstagramError)) throw error;
-      instagramError = error;
-      log(`Instagram: ${error.message}`);
-      if (error.kind === "backoff") {
-        // Keep the existing backoff window.
-      } else if (error.kind === "rate-limit") {
-        state.backoffMinutes = Math.min((state.backoffMinutes || 60) * 2, 24 * 60);
-        state.backoffUntil = new Date(startedAt.getTime() + state.backoffMinutes * 60_000).toISOString();
-      }
-    }
-    stats.requests = ig.requestCount;
-    await saveState(dataDir, state);
 
-    // ---- 2. Classify profiles that are new or whose name, bio, or category changed.
-    const changed = Object.values(state.following)
-      .map((follow) => state.profiles[follow.pk])
-      .filter(Boolean)
-      .filter((profile) => state.classifications[profile.pk]?.fingerprint !== classificationFingerprint(profile));
-    // Pages that fell back to keyword rules (Gemini busy or over quota) get
-    // another try with Gemini, a few per run.
-    const changedPks = new Set(changed.map((profile) => profile.pk));
-    const retryWithGemini = config.classifier.apiKey
-      ? Object.values(state.following)
-          .map((follow) => state.profiles[follow.pk])
-          .filter((profile) => profile && !changedPks.has(profile.pk) && state.classifications[profile.pk]?.method === "rules")
-          .slice(0, config.classifier.batchSize * 2)
-      : [];
-    const toClassify = [...changed, ...retryWithGemini];
-    if (toClassify.length) {
-      log(`Classifying ${toClassify.length} profiles${config.classifier.apiKey ? " with Gemini" : " with keyword rules (no GEMINI_API_KEY)"}.`);
-      const results = await classifyProfiles(toClassify, { ...config.classifier, fetchImpl, log });
-      for (const profile of toClassify) {
-        const result = results.get(profile.pk);
-        state.classifications[profile.pk] = {
-          ...result,
-          fingerprint: classificationFingerprint(profile),
-          at: now().toISOString(),
-        };
+      try {
+        if (inBackoff) throw new InstagramError("Waiting for the Instagram rate limit to reset.", { kind: "backoff" });
+        const owner = await ig.currentUser();
+        state.owner = owner;
+        const target = config.instagram.targetUsername && config.instagram.targetUsername.toLowerCase() !== owner.username.toLowerCase()
+          ? await ig.lookupUser(config.instagram.targetUsername)
+          : { ...owner, isPrivate: false };
+        state.target = { pk: target.pk, username: target.username };
+        log(`Signed in as @${owner.username}; reading who @${target.username} follows.`);
+
+        const following = await ig.following(target.pk);
+        const previousCount = Object.keys(state.following).length;
+        if (previousCount >= 20 && following.length < previousCount * 0.4) {
+          throw new InstagramError(
+            `Instagram returned ${following.length} follows (was ${previousCount}). Refusing to drop that many at once.`,
+          );
+        }
+        // An account missing from one read may just be Instagram's unstable
+        // paging. Drop a page only after it is missing from several runs in a row.
+        const next = {};
+        const nowIso = now().toISOString();
+        for (const user of following) {
+          const previous = state.following[user.pk];
+          if (!previous) stats.added += 1;
+          next[user.pk] = { ...user, firstSeenAt: previous?.firstSeenAt ?? nowIso, missedRuns: 0 };
+        }
+        for (const [pk, previous] of Object.entries(state.following)) {
+          if (next[pk]) continue;
+          const missedRuns = (previous.missedRuns ?? 0) + 1;
+          if (missedRuns < REMOVE_AFTER_MISSED_RUNS) {
+            next[pk] = { ...previous, missedRuns };
+            continue;
+          }
+          stats.removed += 1;
+          delete state.profiles[pk];
+          delete state.classifications[pk];
+          delete state.locations[pk];
+        }
+        state.following = next;
+        stats.following = Object.keys(next).length;
+        log(`Following ${Object.keys(next).length} accounts (${stats.added} new, ${stats.removed} unfollowed).`);
+
+        const queue = profileQueue(state, {
+          budget: config.instagram.profileBudget,
+          maxAgeDays: config.instagram.profileMaxAgeDays,
+          now: startedAt.getTime(),
+        });
+        for (const [index, follow] of queue.entries()) {
+          // Instagram occasionally answers with a stripped-down profile (no
+          // username or name). Retry once, then leave it for the next run.
+          let profile = await ig.userInfo(follow.pk);
+          if (!profile.username) profile = await ig.userInfo(follow.pk);
+          if (!profile.username) {
+            stats.incompleteProfiles = (stats.incompleteProfiles ?? 0) + 1;
+            log(`Instagram returned an incomplete profile for @${follow.username}; retrying next run.`);
+            continue;
+          }
+          profile.postLocations = config.instagram.fetchPostLocations && needsPostLocations(profile)
+            ? await ig.postLocations(follow.pk)
+            : state.profiles[follow.pk]?.postLocations ?? [];
+          profile.fetchedAt = now().toISOString();
+          state.profiles[follow.pk] = profile;
+          stats.profilesFetched += 1;
+          if ((index + 1) % 10 === 0) {
+            await saveState(dataDir, state);
+            log(`Fetched ${index + 1}/${queue.length} profiles.`);
+          }
+        }
+        state.backoffUntil = null;
+        state.backoffMinutes = 0;
+      } catch (error) {
+        if (!(error instanceof InstagramError)) throw error;
+        instagramError = error;
+        log(`Instagram: ${error.message}`);
+        if (error.kind === "backoff") {
+          // Keep the existing backoff window.
+        } else if (error.kind === "rate-limit") {
+          state.backoffMinutes = Math.min((state.backoffMinutes || 60) * 2, 24 * 60);
+          state.backoffUntil = new Date(startedAt.getTime() + state.backoffMinutes * 60_000).toISOString();
+        }
       }
-      stats.classified = toClassify.length;
+      stats.requests = ig.requestCount;
       await saveState(dataDir, state);
+
+      // ---- 2. Classify profiles that are new or whose name, bio, or category changed.
+      const changed = Object.values(state.following)
+        .map((follow) => state.profiles[follow.pk])
+        .filter(Boolean)
+        .filter((profile) => state.classifications[profile.pk]?.fingerprint !== classificationFingerprint(profile));
+      // Pages that fell back to keyword rules (Gemini busy or over quota) get
+      // another try with Gemini, a few per run.
+      const changedPks = new Set(changed.map((profile) => profile.pk));
+      const retryWithGemini = config.classifier.apiKey
+        ? Object.values(state.following)
+            .map((follow) => state.profiles[follow.pk])
+            .filter((profile) => profile && !changedPks.has(profile.pk) && state.classifications[profile.pk]?.method === "rules")
+            .slice(0, config.classifier.batchSize * 2)
+        : [];
+      const toClassify = [...changed, ...retryWithGemini];
+      if (toClassify.length) {
+        log(`Classifying ${toClassify.length} profiles${config.classifier.apiKey ? " with Gemini" : " with keyword rules (no GEMINI_API_KEY)"}.`);
+        const results = await classifyProfiles(toClassify, { ...config.classifier, fetchImpl, log });
+        for (const profile of toClassify) {
+          const result = results.get(profile.pk);
+          state.classifications[profile.pk] = {
+            ...result,
+            fingerprint: classificationFingerprint(profile),
+            at: now().toISOString(),
+          };
+        }
+        stats.classified = toClassify.length;
+        await saveState(dataDir, state);
+      }
     }
 
     // ---- 3. Locate public places.
@@ -286,6 +294,13 @@ export async function runSync({ config = loadConfig(), log = console.log, fetchI
     }
 
     // ---- 4. Publish.
+    if (!full) {
+      await saveState(dataDir, state);
+      await writeJson(paths(dataDir).atlas, buildAtlas(state, config.publish));
+      await writeJson(paths(dataDir).review, buildReviewQueue(state));
+      log(`Republished: ${stats.located} places; ${stats.review} waiting for review.`);
+      return { ok: true, mode, stats };
+    }
     run.ok = !instagramError;
     run.finishedAt = now().toISOString();
     run.error = instagramError?.message ?? null;

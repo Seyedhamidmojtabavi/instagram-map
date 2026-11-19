@@ -51,6 +51,7 @@ export async function POST(request: Request) {
   const approvals = current.approvals.filter((item) => item.username.toLowerCase() !== username.toLowerCase());
   approvals.push(approval);
   await writeJsonFile(file, { approvals });
-  await writeJsonFile(dataPath("sync-request.json"), { requestedAt: new Date().toISOString(), reason: "approval" });
+  // Republish only: re-applies approvals to stored data without calling Instagram.
+  await writeJsonFile(dataPath("publish-request.json"), { requestedAt: new Date().toISOString() });
   return Response.json({ saved: true, approval });
 }

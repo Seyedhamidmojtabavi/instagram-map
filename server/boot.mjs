@@ -43,7 +43,9 @@ await rm(files.lock, { force: true });
 const hasCredentials = Boolean(config.instagram.authorization || config.instagram.sessionId);
 let running = false;
 let nextRunAt = null;
-let lastStartedAt = 0;
+// "Sync now" requests left over from before this boot are dropped: they were
+// either served already or interrupted by the deploy that started this process.
+let lastStartedAt = Date.now();
 
 async function writeStatus(extra = {}) {
   const previous = await readJson(files.status, {});
@@ -56,6 +58,20 @@ async function writeStatus(extra = {}) {
     updatedAt: new Date().toISOString(),
     ...extra,
   });
+}
+
+/** Re-applies approvals without touching Instagram. Takes a few seconds. */
+async function publishNow() {
+  if (running) return;
+  running = true;
+  await writeStatus({ publishing: true });
+  try {
+    await runSync({ config, log, mode: "publish" });
+  } catch (error) {
+    log(`Republish failed: ${error.stack ?? error.message}`);
+  }
+  running = false;
+  await writeStatus({ publishing: false, lastPublishedAt: new Date().toISOString() });
 }
 
 async function syncNow(trigger) {
@@ -96,14 +112,28 @@ if (!hasCredentials) {
   setInterval(() => {
     if (!running && nextRunAt && Date.parse(nextRunAt) <= Date.now()) syncNow("schedule");
   }, 30_000);
-  setInterval(async () => {
-    if (running) return;
-    const request = await readJson(files.request, null).catch(() => null);
-    if (!request) return;
-    await rm(files.request, { force: true });
-    // A request made before the last run started was already served by it
-    // (a duplicated POST would otherwise queue a second full sync).
-    if (Date.parse(request.requestedAt ?? "") <= lastStartedAt) return;
-    syncNow("manual");
-  }, 10_000);
 }
+
+// Apply approvals and current location rules to stored data right away, so a
+// deploy never has to wait for the next Instagram sync to fix the map.
+setTimeout(() => publishNow(), 5_000);
+
+// Manual triggers from /admin. Approvals only republish; "Sync now" runs a
+// full sync. While a sync runs, requests wait (the sync writes the state file).
+setInterval(async () => {
+  if (running) return;
+  const publish = await readJson(files.publishRequest, null).catch(() => null);
+  if (publish) {
+    await rm(files.publishRequest, { force: true });
+    await publishNow();
+    return;
+  }
+  if (!hasCredentials) return;
+  const request = await readJson(files.request, null).catch(() => null);
+  if (!request) return;
+  await rm(files.request, { force: true });
+  // A request made before the last run started was already served by it
+  // (a duplicated POST would otherwise queue a second full sync).
+  if (Date.parse(request.requestedAt ?? "") <= lastStartedAt) return;
+  syncNow("manual");
+}, 3_000);
